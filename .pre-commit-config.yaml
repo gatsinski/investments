@@ -1,0 +1,33 @@
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: black .
+        language: python
+        pass_filenames: false
+      - id: flake8
+        name: flake8
+        entry: flake8 .
+        language: python
+        pass_filenames: false
+      - id: isort
+        name: isort
+        entry: isort .
+        language: python
+        pass_filenames: false
+      - id: wily
+        name: wily
+        entry: wily diff
+        language: python
+        pass_filenames: true
+      - id: bandit
+        name: bandit
+        entry: bandit . -rll
+        language: python
+        pass_filenames: false
+      - id: tests
+        name: tests
+        entry: pipenv run test
+        language: python
+        pass_filenames: false
