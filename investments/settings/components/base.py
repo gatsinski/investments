@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "investments",
     "investments.contrib.users.apps.UsersConfig",
     "investments.contrib.brokers.apps.BrokersConfig",
+    "investments.contrib.tags.apps.TagsConfig",
 ]
 
 ROOT_URLCONF = "investments.urls"
