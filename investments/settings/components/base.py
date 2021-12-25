@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # Project apps
     "investments",
     "investments.contrib.users.apps.UsersConfig",
+    "investments.contrib.brokers.apps.BrokersConfig",
 ]
 
 ROOT_URLCONF = "investments.urls"
