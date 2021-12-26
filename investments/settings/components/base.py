@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     # Third party apps
     "django_extensions",
     "debug_toolbar",
+    "django_object_actions",
     # Django Apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     "investments.contrib.brokers.apps.BrokersConfig",
     "investments.contrib.tags.apps.TagsConfig",
     "investments.contrib.securities.apps.SecuritiesConfig",
+    "investments.contrib.positions.apps.PositionsConfig",
 ]
 
 ROOT_URLCONF = "investments.urls"
