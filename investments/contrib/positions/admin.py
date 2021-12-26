@@ -276,3 +276,13 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         form.base_fields["broker"].initial = form.base_fields["broker"].queryset.first()
 
         return form
+
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super().get_search_results(
+            request, queryset, search_term
+        )
+
+        if "autocomplete/" in request.path:
+            queryset = queryset.filter(security__user=request.user)
+
+        return queryset, use_distinct
