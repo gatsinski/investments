@@ -1,0 +1,380 @@
+# Website translations in Bulgarian
+# Copyright (C) 2021 Hristo Gatsinski
+# This file is distributed under the same license as the PACKAGE package.
+# Hristo Gatsinski <gatsinski@gmail.com>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-12-28 12:33+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Hristo Gatsinski <gatsinski@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: investments/contrib/brokers/models.py:14
+#: investments/contrib/securities/models.py:17
+#: investments/contrib/tags/models.py:14
+msgid "Name"
+msgstr "Име"
+
+#: investments/contrib/brokers/models.py:18
+#: investments/contrib/payments/models.py:47
+#: investments/contrib/payments/models.py:69
+#: investments/contrib/positions/models.py:50
+#: investments/contrib/securities/models.py:42
+#: investments/contrib/securities/models.py:65
+msgid "Notes"
+msgstr "Бележки"
+
+#: investments/contrib/brokers/models.py:21
+#: investments/contrib/payments/admin.py:88
+#: investments/contrib/positions/admin.py:168
+msgid "Broker"
+msgstr "Брокер"
+
+#: investments/contrib/brokers/models.py:22
+#: investments/contrib/positions/admin.py:42
+msgid "Brokers"
+msgstr "Брокери"
+
+#: investments/contrib/payments/admin.py:22
+#: investments/contrib/positions/models.py:53
+msgid "Position"
+msgstr "Позиция"
+
+#: investments/contrib/payments/admin.py:34
+#: investments/contrib/positions/admin.py:100
+#: investments/contrib/positions/models.py:20
+#: investments/contrib/securities/admin.py:47
+msgid "Units"
+msgstr "Единици"
+
+#: investments/contrib/payments/admin.py:41
+#: investments/contrib/positions/admin.py:76
+#: investments/contrib/securities/models.py:23
+msgid "Security"
+msgstr "Ценна книга"
+
+#: investments/contrib/payments/admin.py:59
+#: investments/contrib/payments/models.py:22
+#: investments/contrib/positions/admin.py:141
+#: investments/contrib/positions/models.py:46
+#: investments/contrib/tags/models.py:19
+msgid "Tags"
+msgstr "Тагове"
+
+#: investments/contrib/payments/admin.py:74
+#: investments/contrib/positions/admin.py:156
+#: investments/contrib/users/models.py:35
+msgid "User"
+msgstr "Потребител"
+
+#: investments/contrib/payments/constants.py:10
+msgid "Monthly"
+msgstr "Месечен"
+
+#: investments/contrib/payments/constants.py:11
+msgid "Quarterly"
+msgstr "Тримесечен"
+
+#: investments/contrib/payments/constants.py:12
+msgid "Semiannual"
+msgstr "Шестмесечен"
+
+#: investments/contrib/payments/constants.py:13
+msgid "Annual"
+msgstr "Годишен"
+
+#: investments/contrib/payments/constants.py:14
+msgid "Special"
+msgstr "Специален"
+
+#: investments/contrib/payments/models.py:18
+msgid "Recorded on"
+msgstr "Отчетен на"
+
+#: investments/contrib/payments/models.py:27
+msgid "Payment"
+msgstr "Плащане"
+
+#: investments/contrib/payments/models.py:28
+msgid "Payments"
+msgstr "Плащания"
+
+#: investments/contrib/payments/models.py:31
+#, python-brace-format
+msgid "Payment {self.uuid}"
+msgstr "Плащане {self.uuid}"
+
+#: investments/contrib/payments/models.py:36
+#: investments/contrib/payments/models.py:61
+msgid "Amount"
+msgstr "Сума"
+
+#: investments/contrib/payments/models.py:42
+#: investments/contrib/securities/models.py:37
+#: investments/contrib/securities/models.py:60
+msgid "Type"
+msgstr "Тип"
+
+#: investments/contrib/payments/models.py:50
+msgid "Dividend Payment"
+msgstr "Плащане на дивидент"
+
+#: investments/contrib/payments/models.py:51
+msgid "Dividend Payments"
+msgstr "Плащания на дивидент"
+
+#: investments/contrib/payments/models.py:55
+#, python-brace-format
+msgid ""
+"Dividend Payment, position {self.position.position_id}, {self.position."
+"security}"
+msgstr ""
+"Плащане на дивидент, позиция {self.position.position_id}, {self.position."
+"security}"
+
+#: investments/contrib/payments/models.py:72
+msgid "Interest Payment"
+msgstr "Плащане на лихва"
+
+#: investments/contrib/payments/models.py:73
+msgid "Interest Payments"
+msgstr "Плащания на лихва"
+
+#: investments/contrib/payments/models.py:77
+#, python-brace-format
+msgid ""
+"Interest Payment, position {self.position.position_id}, {self.position."
+"security}"
+msgstr ""
+"Плащане на лихва, позиция {self.position.position_id}, {self.position."
+"security}"
+
+#: investments/contrib/positions/admin.py:45
+#: investments/contrib/securities/models.py:24
+msgid "Securities"
+msgstr "Ценни книжа"
+
+#: investments/contrib/positions/admin.py:93
+#: investments/contrib/securities/models.py:33
+msgid "Sector"
+msgstr "Сектор"
+
+#: investments/contrib/positions/admin.py:107
+#: investments/contrib/positions/models.py:26
+msgid "Open price"
+msgstr "Цена при отваряне"
+
+#: investments/contrib/positions/admin.py:114
+#: investments/contrib/positions/forms.py:6
+#: investments/contrib/positions/models.py:32
+msgid "Close price"
+msgstr "Цена при затваряне"
+
+#: investments/contrib/positions/admin.py:121
+msgid "Open amount"
+msgstr "Сума при отваряне"
+
+#: investments/contrib/positions/admin.py:128
+msgid "Close amount"
+msgstr "Сума при затваряне"
+
+#: investments/contrib/positions/admin.py:135
+msgid "P/L"
+msgstr "П/З"
+
+#: investments/contrib/positions/admin.py:191
+msgid "The position is already closed"
+msgstr "Позицията е вече затворена"
+
+#: investments/contrib/positions/admin.py:206
+msgid "The position was successfully closed"
+msgstr "Позицията беше успешно затворена"
+
+#: investments/contrib/positions/admin.py:238
+msgid "The position was successfully opened"
+msgstr "Позицията беше успешно отворена"
+
+#: investments/contrib/positions/admin.py:241
+msgid "The position is already open"
+msgstr "Позицията е вече отворена"
+
+#: investments/contrib/positions/admin_filters.py:9
+msgid "Status"
+msgstr "Статус"
+
+#: investments/contrib/positions/admin_filters.py:13
+msgid "All"
+msgstr "Всички"
+
+#: investments/contrib/positions/admin_filters.py:14
+msgid "Open"
+msgstr "Отворена"
+
+#: investments/contrib/positions/admin_filters.py:15
+msgid "Closed"
+msgstr "Затворена"
+
+#: investments/contrib/positions/models.py:13
+msgid "ID"
+msgstr "Идентификатор"
+
+#: investments/contrib/positions/models.py:16
+msgid ""
+"The unique position ID used to identify this position within broker's "
+"platform."
+msgstr ""
+"Уникалният идентификатор на позицията, използван за нейното идентифициране в "
+"системата на брокера."
+
+#: investments/contrib/positions/models.py:48
+msgid "Opened at"
+msgstr "Отворена на"
+
+#: investments/contrib/positions/models.py:49
+msgid "Closed at"
+msgstr "Затворена на"
+
+#: investments/contrib/positions/models.py:54
+msgid "Positions"
+msgstr "Позиции"
+
+#: investments/contrib/positions/templates/admin/positions/close_position_form.html:18
+msgid "Home"
+msgstr "Начало"
+
+#: investments/contrib/positions/templates/admin/positions/close_position_form.html:22
+msgid "Close position"
+msgstr "Затвори позицията"
+
+#: investments/contrib/positions/templates/admin/positions/close_position_form.html:38
+msgid "Close"
+msgstr "Затвори"
+
+#: investments/contrib/securities/constants.py:17
+msgid "Energy"
+msgstr "Енергетика"
+
+#: investments/contrib/securities/constants.py:18
+msgid "Materials"
+msgstr "Материали"
+
+#: investments/contrib/securities/constants.py:19
+msgid "Industrials"
+msgstr "Промишленост"
+
+#: investments/contrib/securities/constants.py:20
+msgid "Consumer Discretionary"
+msgstr "Потребителски стоки със селективно търсене"
+
+#: investments/contrib/securities/constants.py:21
+msgid "Consumer Staples"
+msgstr "Основни потребителски стоки"
+
+#: investments/contrib/securities/constants.py:22
+msgid "Health Care"
+msgstr "Здравеопазване"
+
+#: investments/contrib/securities/constants.py:23
+msgid "Financials"
+msgstr "Финанси"
+
+#: investments/contrib/securities/constants.py:24
+msgid "Information Technology"
+msgstr "Информационни технологии"
+
+#: investments/contrib/securities/constants.py:25
+msgid "Communication Services"
+msgstr "Комуникационни услуги"
+
+#: investments/contrib/securities/constants.py:26
+msgid "Utilities"
+msgstr "Комунални услуги"
+
+#: investments/contrib/securities/constants.py:27
+msgid "Real Estate"
+msgstr "Недвижимо имущество"
+
+#: investments/contrib/securities/constants.py:34
+msgid "Common stock"
+msgstr "Обикновени акции"
+
+#: investments/contrib/securities/constants.py:35
+msgid "Preferred stock"
+msgstr "Привилегировани акции"
+
+#: investments/contrib/securities/constants.py:42
+msgid "Government bond"
+msgstr "Държавни облигации"
+
+#: investments/contrib/securities/constants.py:43
+msgid "Corporate bond"
+msgstr "Корпоративни облигации"
+
+#: investments/contrib/securities/models.py:31
+msgid "Symbol"
+msgstr "Символ"
+
+#: investments/contrib/securities/models.py:45
+msgid "Stock"
+msgstr "Акция"
+
+#: investments/contrib/securities/models.py:46
+msgid "Stocks"
+msgstr "Акции"
+
+#: investments/contrib/securities/models.py:68
+msgid "Bond"
+msgstr "Облигация"
+
+#: investments/contrib/securities/models.py:69
+msgid "Bonds"
+msgstr "Облигации"
+
+#: investments/contrib/tags/models.py:18
+msgid "Tag"
+msgstr "Таг"
+
+#: investments/contrib/users/managers.py:8
+msgid "Email is required"
+msgstr "Електронната поща е задължителна"
+
+#: investments/contrib/users/managers.py:19
+msgid "Superuser must have is_staff=True."
+msgstr "Суперпотребителят трябва да има is_staff=True."
+
+#: investments/contrib/users/managers.py:21
+msgid "Superuser must have is_superuser=True."
+msgstr "Суперпотребителят трябва да има is_superuser=True."
+
+#: investments/contrib/users/models.py:18
+msgid "Username"
+msgstr "Потребителско име"
+
+#: investments/contrib/users/models.py:23
+msgid "150 characters or fewer. Letters, digits and @/./+/-/_ only."
+msgstr "150 символа или по-малко. Букви, цифри и @/./+/-/_ only."
+
+#: investments/contrib/users/models.py:25
+msgid "A user with that username already exists."
+msgstr "Потребител с това потребителско име вече съществува."
+
+#: investments/contrib/users/models.py:36
+msgid "Users"
+msgstr "Потребители"
+
+#: investments/models.py:6
+msgid "Created at"
+msgstr "Създадено на"
+
+#: investments/models.py:7
+msgid "Updated at"
+msgstr "Обновено на"

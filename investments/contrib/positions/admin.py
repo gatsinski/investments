@@ -203,7 +203,7 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
                 position.closed_at = timezone.now()
                 position.save()
 
-                self.message_user(request, _("The position was successfully closed!"))
+                self.message_user(request, _("The position was successfully closed"))
 
                 return redirect(
                     "admin:positions_position_change", object_id=str(position.pk)
@@ -235,7 +235,7 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             position.closed_at = None
             position.close_price = None
             position.save()
-            self.message_user(request, _("The position is successfully opened"))
+            self.message_user(request, _("The position was successfully opened"))
         else:
             self.message_user(
                 request, _("The position is already open"), level=messages.WARNING
