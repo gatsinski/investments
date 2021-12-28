@@ -18,9 +18,9 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
+from investments.contrib.positions.models import Position
 from investments.contrib.securities.constants import SECTOR_CHOICES
 from investments.contrib.securities.models import Bond
-from investments.contrib.positions.models import Position
 from investments.contrib.tags.models import Tag
 
 from .models import DividendPayment, InterestPayment
@@ -143,7 +143,10 @@ class BasePaymentsAdmin(admin.ModelAdmin):
             .order_by(TruncDay("recorded_on"))
         )
         return self.show_payments(
-            request, queryset, chart_name=_("Payments grouped by days"), chart_label=_("Payments")
+            request,
+            queryset,
+            chart_name=_("Payments grouped by days"),
+            chart_label=_("Payments"),
         )
 
     @admin.action(description=_("Show payments grouped by months"))
@@ -161,7 +164,10 @@ class BasePaymentsAdmin(admin.ModelAdmin):
             .order_by(TruncMonth("recorded_on"))
         )
         return self.show_payments(
-            request, queryset, chart_name=_("Payments grouped by months"), chart_label=_("Payments")
+            request,
+            queryset,
+            chart_name=_("Payments grouped by months"),
+            chart_label=_("Payments"),
         )
 
     @admin.action(description=_("Show payments grouped by quarters"))
@@ -180,7 +186,10 @@ class BasePaymentsAdmin(admin.ModelAdmin):
         )
 
         return self.show_payments(
-            request, queryset, chart_name=_("Payments grouped by quarters"), chart_label=_("Payments")
+            request,
+            queryset,
+            chart_name=_("Payments grouped by quarters"),
+            chart_label=_("Payments"),
         )
 
     def show_payments(self, request, queryset, chart_name, chart_label):
@@ -238,8 +247,10 @@ class BasePaymentsAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
 
-        form.base_fields['position'].queryset = Position.objects.filter(security__user=request.user)
-        form.base_fields['tags'].queryset = Tag.objects.filter(author=request.user)
+        form.base_fields["position"].queryset = Position.objects.filter(
+            security__user=request.user
+        )
+        form.base_fields["tags"].queryset = Tag.objects.filter(author=request.user)
 
         return form
 
