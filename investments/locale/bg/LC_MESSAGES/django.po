@@ -34,47 +34,108 @@ msgid "Notes"
 msgstr "Бележки"
 
 #: investments/contrib/brokers/models.py:21
-#: investments/contrib/payments/admin.py:88
-#: investments/contrib/positions/admin.py:168
+#: investments/contrib/payments/admin.py:110
+#: investments/contrib/positions/admin.py:197
 msgid "Broker"
 msgstr "Брокер"
 
 #: investments/contrib/brokers/models.py:22
-#: investments/contrib/positions/admin.py:42
+#: investments/contrib/positions/admin.py:49
 msgid "Brokers"
 msgstr "Брокери"
 
-#: investments/contrib/payments/admin.py:22
+#: investments/contrib/payments/admin.py:44
 #: investments/contrib/positions/models.py:53
 msgid "Position"
 msgstr "Позиция"
 
-#: investments/contrib/payments/admin.py:34
-#: investments/contrib/positions/admin.py:100
+#: investments/contrib/payments/admin.py:56
+#: investments/contrib/positions/admin.py:129
 #: investments/contrib/positions/models.py:20
-#: investments/contrib/securities/admin.py:47
+#: investments/contrib/positions/templates/admin/positions/statistics.html:56
+#: investments/contrib/securities/admin.py:53
 msgid "Units"
 msgstr "Единици"
 
-#: investments/contrib/payments/admin.py:41
-#: investments/contrib/positions/admin.py:76
+#: investments/contrib/payments/admin.py:63
+#: investments/contrib/positions/admin.py:105
 #: investments/contrib/securities/models.py:23
 msgid "Security"
 msgstr "Ценна книга"
 
-#: investments/contrib/payments/admin.py:59
+#: investments/contrib/payments/admin.py:81
 #: investments/contrib/payments/models.py:22
-#: investments/contrib/positions/admin.py:141
+#: investments/contrib/positions/admin.py:170
 #: investments/contrib/positions/models.py:46
 #: investments/contrib/tags/models.py:19
 msgid "Tags"
 msgstr "Тагове"
 
-#: investments/contrib/payments/admin.py:74
-#: investments/contrib/positions/admin.py:156
+#: investments/contrib/payments/admin.py:96
+#: investments/contrib/positions/admin.py:185
 #: investments/contrib/users/models.py:35
 msgid "User"
 msgstr "Потребител"
+
+#: investments/contrib/payments/admin.py:122
+msgid "Show payments grouped by days"
+msgstr "Покажи плащания групирани по дни"
+
+#: investments/contrib/payments/admin.py:148
+msgid "Payments grouped by days"
+msgstr "Плащания групирани по дни"
+
+#: investments/contrib/payments/admin.py:149
+#: investments/contrib/payments/admin.py:170
+#: investments/contrib/payments/admin.py:192
+#: investments/contrib/payments/admin.py:212
+#: investments/contrib/payments/models.py:28
+msgid "Payments"
+msgstr "Плащания"
+
+#: investments/contrib/payments/admin.py:152
+msgid "Show payments grouped by months"
+msgstr "Покажи плащания групирани по месеци"
+
+#: investments/contrib/payments/admin.py:169
+msgid "Payments grouped by months"
+msgstr "Плащания групирани по месеци"
+
+#: investments/contrib/payments/admin.py:173
+msgid "Show payments grouped by quarters"
+msgstr "Покажи плащания групирани по тримесечия"
+
+#: investments/contrib/payments/admin.py:191
+msgid "Payments grouped by quarters"
+msgstr "Плащания групирани по тримесечия"
+
+#: investments/contrib/payments/admin.py:195
+msgid "Show payments grouped by years"
+msgstr "Покажи плащания групирани по години"
+
+#: investments/contrib/payments/admin.py:211
+msgid "Payments grouped by years"
+msgstr "Плащания групирани по години"
+
+#: investments/contrib/payments/admin.py:229
+msgid "Show securities grouped by received amount"
+msgstr "Покажи ценни книжа групирани по получена сума"
+
+#: investments/contrib/payments/admin.py:244
+msgid "Securities grouped by received amount"
+msgstr "Ценни книжа групирани по получена сума"
+
+#: investments/contrib/payments/admin.py:245
+msgid "Received amount"
+msgstr "Получена сума"
+
+#: investments/contrib/payments/admin.py:311
+msgid "Show sectors grouped by received amount"
+msgstr "Покажи сектори групирани по получена сума"
+
+#: investments/contrib/payments/admin.py:329
+msgid "Sectors grouped by received amount"
+msgstr "Сектори групирани по получена сума"
 
 #: investments/contrib/payments/constants.py:10
 msgid "Monthly"
@@ -103,10 +164,6 @@ msgstr "Отчетен на"
 #: investments/contrib/payments/models.py:27
 msgid "Payment"
 msgstr "Плащане"
-
-#: investments/contrib/payments/models.py:28
-msgid "Payments"
-msgstr "Плащания"
 
 #: investments/contrib/payments/models.py:31
 #, python-brace-format
@@ -158,52 +215,200 @@ msgstr ""
 "Плащане на лихва, позиция {self.position.position_id}, {self.position."
 "security}"
 
-#: investments/contrib/positions/admin.py:45
+#: investments/contrib/positions/admin.py:52
+#: investments/contrib/positions/admin.py:538
 #: investments/contrib/securities/models.py:24
 msgid "Securities"
 msgstr "Ценни книжа"
 
-#: investments/contrib/positions/admin.py:93
+#: investments/contrib/positions/admin.py:122
 #: investments/contrib/securities/models.py:33
 msgid "Sector"
 msgstr "Сектор"
 
-#: investments/contrib/positions/admin.py:107
+#: investments/contrib/positions/admin.py:136
 #: investments/contrib/positions/models.py:26
 msgid "Open price"
 msgstr "Цена при отваряне"
 
-#: investments/contrib/positions/admin.py:114
+#: investments/contrib/positions/admin.py:143
 #: investments/contrib/positions/forms.py:6
 #: investments/contrib/positions/models.py:32
 msgid "Close price"
 msgstr "Цена при затваряне"
 
-#: investments/contrib/positions/admin.py:121
+#: investments/contrib/positions/admin.py:150
+#: investments/contrib/positions/templates/admin/positions/statistics.html:32
 msgid "Open amount"
 msgstr "Сума при отваряне"
 
-#: investments/contrib/positions/admin.py:128
+#: investments/contrib/positions/admin.py:157
+#: investments/contrib/positions/templates/admin/positions/statistics.html:36
 msgid "Close amount"
 msgstr "Сума при затваряне"
 
-#: investments/contrib/positions/admin.py:135
+#: investments/contrib/positions/admin.py:164
 msgid "P/L"
 msgstr "П/З"
 
-#: investments/contrib/positions/admin.py:191
+#: investments/contrib/positions/admin.py:218
+msgid "Show invested amount grouped by days"
+msgstr "Покажи инвестирана сума групирана по дни"
+
+#: investments/contrib/positions/admin.py:244
+msgid "Invested amount grouped by days"
+msgstr "ИНвестирана сума групирана по дни"
+
+#: investments/contrib/positions/admin.py:245
+#: investments/contrib/positions/admin.py:265
+#: investments/contrib/positions/admin.py:287
+msgid "Invested amount"
+msgstr "Инвестирана сума"
+
+#: investments/contrib/positions/admin.py:248
+msgid "Show invested amount grouped by months"
+msgstr "Покажи инвестирана сума групирана по месеци"
+
+#: investments/contrib/positions/admin.py:264
+msgid "Invested amount grouped by months"
+msgstr "Инвестирана сума групирана по месеци"
+
+#: investments/contrib/positions/admin.py:268
+msgid "Show invested amount grouped by quarters"
+msgstr "Покажи инвестирана сума групирана по тримесечия"
+
+#: investments/contrib/positions/admin.py:286
+msgid "Invested amount grouped by quarters"
+msgstr "Инвестирана сума групирана по тримесечия"
+
+#: investments/contrib/positions/admin.py:290
+msgid "Show closed amount grouped by days"
+msgstr "Покажи сума от затворени позиции групирана по дни"
+
+#: investments/contrib/positions/admin.py:316
+msgid "Closed amount grouped by days"
+msgstr "Покажи сума от затворени позиции групирана по дни"
+
+#: investments/contrib/positions/admin.py:317
+#: investments/contrib/positions/admin.py:337
+#: investments/contrib/positions/admin.py:359
+msgid "Closed amount"
+msgstr "Сума при затваряне"
+
+#: investments/contrib/positions/admin.py:320
+msgid "Show closed amount grouped by months"
+msgstr "Покажи сума от затворени позиции групирана по месеци"
+
+#: investments/contrib/positions/admin.py:336
+msgid "Closed amount grouped by months"
+msgstr "Покажи сума от затворени позиции групирана по месеци"
+
+#: investments/contrib/positions/admin.py:340
+msgid "Show closed amount grouped by quarters"
+msgstr "Покажи сума от затворени позиции групирана по тримесечия"
+
+#: investments/contrib/positions/admin.py:358
+msgid "Closed amount grouped by quarters"
+msgstr "Сума от затворени позиции групирана по тримесечия"
+
+#: investments/contrib/positions/admin.py:362
+msgid "Show opened positions grouped by days"
+msgstr "Покажи отворени позиции групирани по дни"
+
+#: investments/contrib/positions/admin.py:388
+msgid "Opened positions grouped by days"
+msgstr "Отворени позиции групирани по дни"
+
+#: investments/contrib/positions/admin.py:389
+#: investments/contrib/positions/admin.py:409
+#: investments/contrib/positions/admin.py:431
+msgid "Opened positions"
+msgstr "Отворени позиции"
+
+#: investments/contrib/positions/admin.py:392
+msgid "Show opened positions grouped by months"
+msgstr "Покажи отворени позиции  групирани по месеци"
+
+#: investments/contrib/positions/admin.py:408
+msgid "Opened positions grouped by months"
+msgstr "Отворени позиции  групирани по месеци"
+
+#: investments/contrib/positions/admin.py:412
+msgid "Show opened positions grouped by quarters"
+msgstr "Покажи отворени позиции  групирани по тримесечия"
+
+#: investments/contrib/positions/admin.py:430
+msgid "Opened positions grouped by quarters"
+msgstr "Отворени позиции  групирани по тримесечия"
+
+#: investments/contrib/positions/admin.py:434
+msgid "Show closed positions grouped by days"
+msgstr "Покажи затворени позиции групирани по дни"
+
+#: investments/contrib/positions/admin.py:460
+msgid "Closed positions grouped by days"
+msgstr "Затворени позиции групирани по дни"
+
+#: investments/contrib/positions/admin.py:461
+#: investments/contrib/positions/admin.py:481
+#: investments/contrib/positions/admin.py:503
+msgid "Closed positions"
+msgstr "Затворени позиции"
+
+#: investments/contrib/positions/admin.py:464
+msgid "Show closed positions grouped by months"
+msgstr "Покажи затворени позиции групирани по месеци"
+
+#: investments/contrib/positions/admin.py:480
+msgid "Closed positions grouped by months"
+msgstr "Затворени позиции групирани по месеци"
+
+#: investments/contrib/positions/admin.py:484
+msgid "Show closed positions grouped by quarters"
+msgstr "Покажи затворени позиции групирани по тримесечия"
+
+#: investments/contrib/positions/admin.py:502
+msgid "Closed positions grouped by quarters"
+msgstr "Затворени позиции групирани по тримесечия"
+
+#: investments/contrib/positions/admin.py:520
+msgid "Show securities grouped by invested amount"
+msgstr "Покажи ценни книжа групирани по инвестирана сума"
+
+#: investments/contrib/positions/admin.py:537
+msgid "Securities grouped by invested amount"
+msgstr "Ценни книжа групирани по инвестирана сума"
+
+#: investments/contrib/positions/admin.py:543
+msgid "Show sectors grouped by invested amount"
+msgstr "Покажи сектори групирани по инвестирана сума"
+
+#: investments/contrib/positions/admin.py:564
+msgid "Sectors grouped by invested amount"
+msgstr "Сектори групирани по инвестирана сума"
+
+#: investments/contrib/positions/admin.py:565
+#: investments/contrib/securities/admin.py:80
+msgid "Sectors"
+msgstr "Сектори"
+
+#: investments/contrib/positions/admin.py:570
+msgid "Show analytics"
+msgstr "Покажи анализ"
+
+#: investments/contrib/positions/admin.py:603
 msgid "The position is already closed"
 msgstr "Позицията е вече затворена"
 
-#: investments/contrib/positions/admin.py:206
+#: investments/contrib/positions/admin.py:618
 msgid "The position was successfully closed"
 msgstr "Позицията беше успешно затворена"
 
-#: investments/contrib/positions/admin.py:238
+#: investments/contrib/positions/admin.py:650
 msgid "The position was successfully opened"
 msgstr "Позицията беше успешно отворена"
 
-#: investments/contrib/positions/admin.py:241
+#: investments/contrib/positions/admin.py:653
 msgid "The position is already open"
 msgstr "Позицията е вече отворена"
 
@@ -248,6 +453,8 @@ msgid "Positions"
 msgstr "Позиции"
 
 #: investments/contrib/positions/templates/admin/positions/close_position_form.html:18
+#: investments/contrib/positions/templates/admin/positions/statistics.html:20
+#: investments/templates/admin/chart.html:21
 msgid "Home"
 msgstr "Начало"
 
@@ -258,6 +465,38 @@ msgstr "Затвори позицията"
 #: investments/contrib/positions/templates/admin/positions/close_position_form.html:38
 msgid "Close"
 msgstr "Затвори"
+
+#: investments/contrib/positions/templates/admin/positions/statistics.html:23
+msgid "Basic statistics"
+msgstr "Базови статистики"
+
+#: investments/contrib/positions/templates/admin/positions/statistics.html:40
+msgid "Unrealized amount"
+msgstr "Нереализирана сума"
+
+#: investments/contrib/positions/templates/admin/positions/statistics.html:44
+msgid "Average open price"
+msgstr "Средна цена при отваряне"
+
+#: investments/contrib/positions/templates/admin/positions/statistics.html:48
+msgid "Average close price"
+msgstr "Средна цена при затваряне"
+
+#: investments/contrib/positions/templates/admin/positions/statistics.html:52
+msgid "Position count"
+msgstr "Брой позиции"
+
+#: investments/contrib/positions/templates/admin/positions/statistics.html:60
+msgid "Profit/Loss"
+msgstr "Печалба/Загуба"
+
+#: investments/contrib/securities/admin.py:62
+msgid "Show sectors grouped by number of companies"
+msgstr "Покажи сектори групирани по брой компании"
+
+#: investments/contrib/securities/admin.py:79
+msgid "Sectors grouped by number of companies"
+msgstr "Сектори групирани по брой компании"
 
 #: investments/contrib/securities/constants.py:17
 msgid "Energy"
