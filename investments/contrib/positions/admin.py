@@ -1,7 +1,20 @@
+import json
+
 from django.contrib import admin
 from django.contrib.admin import helpers
 from django.core.checks import messages
-from django.db.models import F
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Avg, Case, CharField, Count, F, Sum, Value, When
+from django.db.models.functions import (
+    Concat,
+    ExtractDay,
+    ExtractMonth,
+    ExtractQuarter,
+    ExtractYear,
+    TruncDay,
+    TruncMonth,
+    TruncQuarter,
+)
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -10,6 +23,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_object_actions import DjangoObjectActions
 
 from investments.contrib.brokers.models import Broker
+from investments.contrib.securities.constants import SECTOR_CHOICES
 from investments.contrib.securities.models import Bond, Security
 from investments.contrib.tags.models import Tag
 
@@ -69,6 +83,23 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
     date_hierarchy = "opened_at"
     search_fields = ("position_id", "notes", "security__name", "security__stock__symbol")
     autocomplete_fields = ("security",)
+    actions = [
+        "show_daily_invested_amount",
+        "show_monthly_invested_amount",
+        "show_quarterly_invested_amount",
+        "show_daily_closed_amount",
+        "show_monthly_closed_amount",
+        "show_quarterly_closed_amount",
+        "show_daily_opened_positions",
+        "show_monthly_opened_positions",
+        "show_quarterly_opened_positions",
+        "show_daily_closed_positions",
+        "show_monthly_closed_positions",
+        "show_quarterly_closed_positions",
+        "show_securities_by_invested_amount",
+        "show_sectors_by_invested_amount",
+        "show_analytics",
+    ]
     change_actions = ("close_position", "open_position")
 
     @admin.display(
@@ -185,6 +216,353 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             actions.remove("open_position")
 
         return actions
+
+    @admin.action(description=_("Show invested amount grouped by days"))
+    def show_daily_invested_amount(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(
+                day=ExtractDay("opened_at"),
+                month=ExtractMonth("opened_at"),
+                year=ExtractYear("opened_at"),
+            )
+            .values("day", "month", "year")
+            .annotate(
+                value=Sum(F("open_price") * F("units")),
+                label=Concat(
+                    "day",
+                    Value("."),
+                    "month",
+                    Value("."),
+                    "year",
+                    output_field=CharField(),
+                ),
+            )
+            .order_by(TruncDay("opened_at"))
+        )
+        return self.show_positions(
+            request, queryset, chart_name=_("Invested amount grouped by days"), chart_label=_("Invested amount")
+        )
+
+    @admin.action(description=_("Show invested amount grouped by months"))
+    def show_monthly_invested_amount(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(month=ExtractMonth("opened_at"), year=ExtractYear("opened_at"))
+            .values("month", "year")
+            .annotate(
+                value=Sum(F("open_price") * F("units")),
+                label=Concat("month", Value("."), "year", output_field=CharField()),
+            )
+            .order_by(TruncMonth("opened_at"))
+        )
+
+        return self.show_positions(
+            request, queryset, chart_name=_("Invested amount grouped by months"), chart_label=_("Invested amount")
+        )
+
+    @admin.action(description=_("Show invested amount grouped by quarters"))
+    def show_quarterly_invested_amount(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(
+                quarter=ExtractQuarter("opened_at"), year=ExtractYear("opened_at")
+            )
+            .values("quarter", "year")
+            .annotate(
+                value=Sum(F("open_price") * F("units")),
+                label=Concat("quarter", Value("/"), "year", output_field=CharField()),
+            )
+            .order_by(TruncQuarter("opened_at"))
+        )
+
+        return self.show_positions(
+            request, queryset, chart_name=_("Invested amount grouped by quarters"), chart_label=_("Invested amount")
+        )
+
+    @admin.action(description=_("Show closed amount grouped by days"))
+    def show_daily_closed_amount(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(
+                day=ExtractDay("closed_at"),
+                month=ExtractMonth("closed_at"),
+                year=ExtractYear("closed_at"),
+            )
+            .values("day", "month", "year")
+            .annotate(
+                value=Sum(F("close_price") * F("units")),
+                label=Concat(
+                    "day",
+                    Value("."),
+                    "month",
+                    Value("."),
+                    "year",
+                    output_field=CharField(),
+                ),
+            )
+            .order_by(TruncDay("closed_at"))
+        )
+        return self.show_positions(
+            request, queryset, chart_name=_("Closed amount grouped by days"), chart_label=_("Closed amount")
+        )
+
+    @admin.action(description=_("Show closed amount grouped by months"))
+    def show_monthly_closed_amount(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(month=ExtractMonth("closed_at"), year=ExtractYear("closed_at"))
+            .values("month", "year")
+            .annotate(
+                value=Sum(F("close_price") * F("units")),
+                label=Concat("month", Value("."), "year", output_field=CharField()),
+            )
+            .order_by(TruncMonth("closed_at"))
+        )
+
+        return self.show_positions(
+            request, queryset, chart_name=_("Closed amount grouped by months"), chart_label=_("Closed amount")
+        )
+
+    @admin.action(description=_("Show closed amount grouped by quarters"))
+    def show_quarterly_closed_amount(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(
+                quarter=ExtractQuarter("closed_at"), year=ExtractYear("closed_at")
+            )
+            .values("quarter", "year")
+            .annotate(
+                value=Sum(F("close_price") * F("units")),
+                label=Concat("quarter", Value("/"), "year", output_field=CharField()),
+            )
+            .order_by(TruncQuarter("closed_at"))
+        )
+
+        return self.show_positions(
+            request, queryset, chart_name=_("Closed amount grouped by quarters"), chart_label=_("Closed amount")
+        )
+
+    @admin.action(description=_("Show opened positions grouped by days"))
+    def show_daily_opened_positions(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(
+                day=ExtractDay("opened_at"),
+                month=ExtractMonth("opened_at"),
+                year=ExtractYear("opened_at"),
+            )
+            .values("day", "month", "year")
+            .annotate(
+                value=Count("uuid"),
+                label=Concat(
+                    "day",
+                    Value("."),
+                    "month",
+                    Value("."),
+                    "year",
+                    output_field=CharField(),
+                ),
+            )
+            .order_by(TruncDay("opened_at"))
+        )
+        return self.show_positions(
+            request, queryset, chart_name=_("Opened positions grouped by days"), chart_label=_("Opened positions")
+        )
+
+    @admin.action(description=_("Show opened positions grouped by months"))
+    def show_monthly_opened_positions(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(month=ExtractMonth("opened_at"), year=ExtractYear("opened_at"))
+            .values("month", "year")
+            .annotate(
+                value=Count("uuid"),
+                label=Concat("month", Value("."), "year", output_field=CharField()),
+            )
+            .order_by(TruncMonth("opened_at"))
+        )
+
+        return self.show_positions(
+            request, queryset, chart_name=_("Opened positions grouped by months"), chart_label=_("Opened positions")
+        )
+
+    @admin.action(description=_("Show opened positions grouped by quarters"))
+    def show_quarterly_opened_positions(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(
+                quarter=ExtractQuarter("opened_at"), year=ExtractYear("opened_at")
+            )
+            .values("quarter", "year")
+            .annotate(
+                value=Count("uuid"),
+                label=Concat("quarter", Value("/"), "year", output_field=CharField()),
+            )
+            .order_by(TruncQuarter("opened_at"))
+        )
+
+        return self.show_positions(
+            request, queryset, chart_name=_("Opened positions grouped by quarters"), chart_label=_("Opened positions")
+        )
+
+    @admin.action(description=_("Show closed positions grouped by days"))
+    def show_daily_closed_positions(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(
+                day=ExtractDay("closed_at"),
+                month=ExtractMonth("closed_at"),
+                year=ExtractYear("closed_at"),
+            )
+            .values("day", "month", "year")
+            .annotate(
+                value=Count("uuid"),
+                label=Concat(
+                    "day",
+                    Value("."),
+                    "month",
+                    Value("."),
+                    "year",
+                    output_field=CharField(),
+                ),
+            )
+            .order_by(TruncDay("closed_at"))
+        )
+        return self.show_positions(
+            request, queryset, chart_name=_("Closed positions grouped by days"), chart_label=_("Closed positions")
+        )
+
+    @admin.action(description=_("Show closed positions grouped by months"))
+    def show_monthly_closed_positions(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(month=ExtractMonth("closed_at"), year=ExtractYear("closed_at"))
+            .values("month", "year")
+            .annotate(
+                value=Count("uuid"),
+                label=Concat("month", Value("."), "year", output_field=CharField()),
+            )
+            .order_by(TruncMonth("closed_at"))
+        )
+
+        return self.show_positions(
+            request, queryset, chart_name=_("Closed positions grouped by months"), chart_label=_("Closed positions")
+        )
+
+    @admin.action(description=_("Show closed positions grouped by quarters"))
+    def show_quarterly_closed_positions(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .annotate(
+                quarter=ExtractQuarter("closed_at"), year=ExtractYear("closed_at")
+            )
+            .values("quarter", "year")
+            .annotate(
+                value=Count("uuid"),
+                label=Concat("quarter", Value("/"), "year", output_field=CharField()),
+            )
+            .order_by(TruncQuarter("closed_at"))
+        )
+
+        return self.show_positions(
+            request, queryset, chart_name=_("Closed positions grouped by quarters"), chart_label=_("Closed positions")
+        )
+
+    def show_positions(self, request, queryset, chart_name, chart_label):
+        return render(
+            request,
+            "admin/chart.html",
+            context={
+                **self.admin_site.each_context(request),
+                "opts": self.model._meta,
+                "data": json.dumps(list(queryset), cls=DjangoJSONEncoder),
+                "chart_name": chart_name,
+                "chart_label": chart_label,
+                "chart_type": "bar",
+            },
+        )
+
+    @admin.action(description=_("Show securities grouped by invested amount"))
+    def show_securities_by_invested_amount(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .values("security__name")
+            .annotate(
+                value=Sum(F("open_price") * F("units")), label=F("security__name")
+            )
+        )
+
+        return render(
+            request,
+            "admin/chart.html",
+            context={
+                **self.admin_site.each_context(request),
+                "opts": self.model._meta,
+                "data": json.dumps(list(queryset), cls=DjangoJSONEncoder),
+                "chart_name": _("Securities grouped by invested amount"),
+                "chart_label": _("Securities"),
+                "chart_type": "pie",
+            },
+        )
+
+    @admin.action(description=_("Show sectors grouped by invested amount"))
+    def show_sectors_by_invested_amount(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .values("security__stock__sector")
+            .annotate(
+                value=Sum(F("open_price") * F("units")),
+                label=F("security__stock__sector"),
+            )
+        )
+
+        label_map = {key: value for (key, value) in SECTOR_CHOICES}
+
+        return render(
+            request,
+            "admin/chart.html",
+            context={
+                **self.admin_site.each_context(request),
+                "opts": self.model._meta,
+                "data": json.dumps(list(queryset), cls=DjangoJSONEncoder),
+                "label_map": label_map,
+                "chart_name": _("Sectors grouped by invested amount"),
+                "chart_label": _("Sectors"),
+                "chart_type": "pie",
+            },
+        )
+
+    @admin.action(description=_("Show analytics"))
+    def show_analytics(self, request, queryset):
+        open_amount = F("open_price") * F("units")
+        close_amount = F("close_price") * F("units")
+
+        data = queryset.aggregate(
+            open_amount=Sum(open_amount),
+            close_amount=Sum(close_amount),
+            unrealized_amount=Sum(
+                Case(When(close_price__isnull=True, then=open_amount))
+            ),
+            average_open_price=Avg("open_price"),
+            average_close_price=Avg("close_price"),
+            position_count=Count("uuid"),
+            units=Sum("units"),
+            profit_or_loss=(
+                Sum(Case(When(close_price__isnull=False, then=close_amount)))
+                - Sum(Case(When(close_price__isnull=False, then=open_amount)))
+            ),
+        )
+
+        return render(
+            request,
+            "admin/positions/statistics.html",
+            context={
+                **self.admin_site.each_context(request),
+                "opts": self.model._meta,
+                "data": data,
+            },
+        )
 
     def close_position(self, request, position, *args, **kwargs):
         if position.is_closed:
