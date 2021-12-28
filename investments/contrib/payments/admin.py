@@ -12,6 +12,7 @@ from django.db.models.functions import (
     TruncDay,
     TruncMonth,
     TruncQuarter,
+    TruncYear,
 )
 from django.shortcuts import render
 from django.urls import reverse
