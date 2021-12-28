@@ -1,6 +1,12 @@
+import json
+
 from django.contrib import admin
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Count, F
+from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
+from .constants import SECTOR_CHOICES
 from .models import Bond, Security, Stock
 
 
@@ -49,6 +55,33 @@ class StocksAdmin(SecuritiesAdmin):
     @admin.display(description=_("Units"))
     def units(self, stock):
         return stock.units
+
+    actions = [
+        "get_sectors_by_number_of_companies",
+    ]
+
+    @admin.action(description=_("Show sectors grouped by number of companies"))
+    def get_sectors_by_number_of_companies(self, request, queryset):
+        queryset = (
+            queryset.order_by()
+            .values("sector")
+            .annotate(value=Count("uuid"), label=F("sector"))
+        )
+        label_map = {key: value for (key, value) in SECTOR_CHOICES}
+
+        return render(
+            request,
+            "admin/chart.html",
+            context={
+                **self.admin_site.each_context(request),
+                "opts": self.model._meta,
+                "data": json.dumps(list(queryset), cls=DjangoJSONEncoder),
+                "label_map": label_map,
+                "chart_name": _("Sectors grouped by number of companies"),
+                "chart_label": _("Sectors"),
+                "chart_type": "pie",
+            },
+        )
 
 
 @admin.register(Bond)
