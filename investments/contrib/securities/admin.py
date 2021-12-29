@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Bond, Security, Stock
 
@@ -30,6 +31,7 @@ class StocksAdmin(SecuritiesAdmin):
     list_display = (
         "name",
         "symbol",
+        "units",
         "sector",
         "user",
         "created_at",
@@ -39,6 +41,13 @@ class StocksAdmin(SecuritiesAdmin):
     ordering = ("name",)
     date_hierarchy = "created_at"
     search_fields = ("name", "symbol" "notes")
+
+    @admin.display(
+        ordering="position__security",
+        description=_("Units"),
+    )
+    def units(self, stock):
+        return stock.units
 
 
 @admin.register(Bond)
