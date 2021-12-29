@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Sum
 from django.utils.translation import ugettext_lazy as _
 
 from investments.models import TimestampedModel
@@ -46,6 +47,12 @@ class Stock(Security):
 
     def __str__(self):
         return self.name
+
+    @property
+    def units(self):
+        return self.positions.filter(closed_at__isnull=True).aggregate(Sum("units"))[
+            "units__sum"
+        ]
 
 
 class Bond(Security):
