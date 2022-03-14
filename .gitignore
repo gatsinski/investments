@@ -7,3 +7,4 @@ media/
 /static/
 .coverage
 .env
+.xlsx
