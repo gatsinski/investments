@@ -123,12 +123,13 @@ class BasePaymentsAdmin(admin.ModelAdmin):
     def show_daily_payments(self, request, queryset):
         queryset = (
             queryset.order_by()
+            # .values("position__security__name")
             .annotate(
                 day=ExtractDay("recorded_on"),
                 month=ExtractMonth("recorded_on"),
                 year=ExtractYear("recorded_on"),
             )
-            .values("day", "month", "year")
+            .values("day", "month", "year", "position__security__name")
             .annotate(
                 value=Sum("amount"),
                 label=Concat(
@@ -142,6 +143,7 @@ class BasePaymentsAdmin(admin.ModelAdmin):
             )
             .order_by(TruncDay("recorded_on"))
         )
+
         return self.show_payments(
             request,
             queryset,
@@ -156,7 +158,7 @@ class BasePaymentsAdmin(admin.ModelAdmin):
             .annotate(
                 month=ExtractMonth("recorded_on"), year=ExtractYear("recorded_on")
             )
-            .values("month", "year")
+            .values("month", "year", "position__security__name")
             .annotate(
                 value=Sum("amount"),
                 label=Concat("month", Value("."), "year", output_field=CharField()),
