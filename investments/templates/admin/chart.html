@@ -31,38 +31,22 @@
   </div>
 
   <script type="text/javascript">
-      const reports = {{ data|safe }};
-
-      {% if label_map %}
-      const labels = reports.map((it) => {
-        const labelMap = {{ label_map|safe }};
-        return labelMap[it.label]
-      });
-      {% else %}
-      const labels = reports.map((it) => it.label);
-      {% endif %}
-
-      {% if chart_type == "pie" %}
-      const colors = ['#4285f4', '#db4437', '#f4b400', '#0f9d58', '#ff6d00', '#46bdc6', '#ab30c4', '#c1bc1f', '#3949ab', '#f975a8'];
-      {% else %}
-      const colors = ['#79aec8']
-      {% endif %}
-
-      const datasets = [
-        {
-          label: '{{ chart_label }}',
-          data: reports.map(it => it.value),
-          backgroundColor: colors,
-        },
-      ]
-
       const canvas = document.getElementById('report').getContext('2d');
       const myChart = new Chart(canvas, {
         type: '{{ chart_type }}',
-        data: {
-          labels: labels,
-          datasets: datasets,
-        },
+        data: {{ data|safe }},
+        {% if chart_config.is_stacked %}
+        options: {
+          scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              stacked: true
+            }
+          }
+        }
+        {% endif %}
       });
   </script>
 {% endblock %}

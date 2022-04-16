@@ -6,6 +6,9 @@ from django.db.models import Count, F
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
+from investments import chart_constants
+from investments.utils.admin import get_chart_data
+
 from .constants import SECTOR_CHOICES
 from .models import Bond, Security, Stock
 
@@ -67,7 +70,15 @@ class StocksAdmin(SecuritiesAdmin):
             .values("sector")
             .annotate(value=Count("uuid"), label=F("sector"))
         )
+
         label_map = {key: value for (key, value) in SECTOR_CHOICES}
+
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Received amount"),
+            colors=chart_constants.COLORS,
+            label_map=label_map,
+        )
 
         return render(
             request,
@@ -75,8 +86,7 @@ class StocksAdmin(SecuritiesAdmin):
             context={
                 **self.admin_site.each_context(request),
                 "opts": self.model._meta,
-                "data": json.dumps(list(queryset), cls=DjangoJSONEncoder),
-                "label_map": label_map,
+                "data": json.dumps(chart_data, cls=DjangoJSONEncoder),
                 "chart_name": _("Sectors grouped by number of companies"),
                 "chart_label": _("Sectors"),
                 "chart_type": "pie",
