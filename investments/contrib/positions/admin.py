@@ -15,10 +15,12 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django_object_actions import DjangoObjectActions
 
+from investments import chart_constants
 from investments.contrib.brokers.models import Broker
 from investments.contrib.securities.constants import SECTOR_CHOICES
 from investments.contrib.securities.models import Bond, Security
 from investments.contrib.tags.models import Tag
+from investments.utils.admin import get_chart_data
 
 from .admin_filters import StatusFilter
 from .forms import ClosePositionForm
@@ -238,11 +240,17 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             )
             .order_by(TruncDay("opened_at"))
         )
+
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Invested amount"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Invested amount grouped by days"),
-            chart_label=_("Invested amount"),
         )
 
     @admin.action(description=_("Show invested amount grouped by months"))
@@ -258,11 +266,16 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             .order_by(TruncMonth("opened_at"))
         )
 
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Invested amount"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Invested amount grouped by months"),
-            chart_label=_("Invested amount"),
         )
 
     @admin.action(description=_("Show invested amount grouped by quarters"))
@@ -280,11 +293,16 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             .order_by(TruncQuarter("opened_at"))
         )
 
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Invested amount"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Invested amount grouped by quarters"),
-            chart_label=_("Invested amount"),
         )
 
     @admin.action(description=_("Show closed amount grouped by days"))
@@ -310,11 +328,17 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             )
             .order_by(TruncDay("closed_at"))
         )
+
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Closed amount"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Closed amount grouped by days"),
-            chart_label=_("Closed amount"),
         )
 
     @admin.action(description=_("Show closed amount grouped by months"))
@@ -330,11 +354,16 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             .order_by(TruncMonth("closed_at"))
         )
 
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Closed amount"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Closed amount grouped by months"),
-            chart_label=_("Closed amount"),
         )
 
     @admin.action(description=_("Show closed amount grouped by quarters"))
@@ -352,11 +381,16 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             .order_by(TruncQuarter("closed_at"))
         )
 
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Closed amount"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Closed amount grouped by quarters"),
-            chart_label=_("Closed amount"),
         )
 
     @admin.action(description=_("Show opened positions grouped by days"))
@@ -382,11 +416,17 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             )
             .order_by(TruncDay("opened_at"))
         )
+
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Opened positions"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Opened positions grouped by days"),
-            chart_label=_("Opened positions"),
         )
 
     @admin.action(description=_("Show opened positions grouped by months"))
@@ -402,11 +442,16 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             .order_by(TruncMonth("opened_at"))
         )
 
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Opened positions"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Opened positions grouped by months"),
-            chart_label=_("Opened positions"),
         )
 
     @admin.action(description=_("Show opened positions grouped by quarters"))
@@ -424,11 +469,16 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             .order_by(TruncQuarter("opened_at"))
         )
 
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Opened positions"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Opened positions grouped by quarters"),
-            chart_label=_("Opened positions"),
         )
 
     @admin.action(description=_("Show closed positions grouped by days"))
@@ -454,11 +504,17 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             )
             .order_by(TruncDay("closed_at"))
         )
+
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Closed positions"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Closed positions grouped by days"),
-            chart_label=_("Closed positions"),
         )
 
     @admin.action(description=_("Show closed positions grouped by months"))
@@ -474,11 +530,16 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             .order_by(TruncMonth("closed_at"))
         )
 
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Closed positions"),
+            colors=[chart_constants.BASE_COLOR],
+        )
+
         return self.show_positions(
             request,
-            queryset,
+            data=chart_data,
             chart_name=_("Closed positions grouped by months"),
-            chart_label=_("Closed positions"),
         )
 
     @admin.action(description=_("Show closed positions grouped by quarters"))
@@ -496,25 +557,16 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             .order_by(TruncQuarter("closed_at"))
         )
 
-        return self.show_positions(
-            request,
-            queryset,
-            chart_name=_("Closed positions grouped by quarters"),
-            chart_label=_("Closed positions"),
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Closed positions"),
+            colors=[chart_constants.BASE_COLOR],
         )
 
-    def show_positions(self, request, queryset, chart_name, chart_label):
-        return render(
+        return self.show_positions(
             request,
-            "admin/chart.html",
-            context={
-                **self.admin_site.each_context(request),
-                "opts": self.model._meta,
-                "data": json.dumps(list(queryset), cls=DjangoJSONEncoder),
-                "chart_name": chart_name,
-                "chart_label": chart_label,
-                "chart_type": "bar",
-            },
+            data=chart_data,
+            chart_name=_("Closed positions grouped by quarters"),
         )
 
     @admin.action(description=_("Show securities grouped by invested amount"))
@@ -527,17 +579,15 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             )
         )
 
-        return render(
+        chart_data = get_chart_data(
+            queryset=queryset, label=_("Securities"), colors=chart_constants.COLORS
+        )
+
+        return self.show_positions(
             request,
-            "admin/chart.html",
-            context={
-                **self.admin_site.each_context(request),
-                "opts": self.model._meta,
-                "data": json.dumps(list(queryset), cls=DjangoJSONEncoder),
-                "chart_name": _("Securities grouped by invested amount"),
-                "chart_label": _("Securities"),
-                "chart_type": "pie",
-            },
+            data=chart_data,
+            chart_name=_("Securities grouped by invested amount"),
+            chart_type=chart_constants.PIE_CHART,
         )
 
     @admin.action(description=_("Show sectors grouped by invested amount"))
@@ -553,18 +603,38 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
 
         label_map = {key: value for (key, value) in SECTOR_CHOICES}
 
+        chart_data = get_chart_data(
+            queryset=queryset,
+            label=_("Securities"),
+            colors=chart_constants.COLORS,
+            label_map=label_map,
+        )
+
+        return self.show_positions(
+            request,
+            data=chart_data,
+            chart_name=_("Sectors grouped by invested amount"),
+            chart_type=chart_constants.PIE_CHART,
+        )
+
+    def show_positions(
+        self, request, data, chart_name, chart_type=chart_constants.BAR_CHART
+    ):
+        context = {
+            **self.admin_site.each_context(request),
+            "opts": self.model._meta,
+            "data": json.dumps(
+                data,
+                cls=DjangoJSONEncoder,
+            ),
+            "chart_name": chart_name,
+            "chart_type": chart_type,
+        }
+
         return render(
             request,
             "admin/chart.html",
-            context={
-                **self.admin_site.each_context(request),
-                "opts": self.model._meta,
-                "data": json.dumps(list(queryset), cls=DjangoJSONEncoder),
-                "label_map": label_map,
-                "chart_name": _("Sectors grouped by invested amount"),
-                "chart_label": _("Sectors"),
-                "chart_type": "pie",
-            },
+            context=context,
         )
 
     @admin.action(description=_("Show analytics"))
