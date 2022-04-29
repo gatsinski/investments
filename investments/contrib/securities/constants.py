@@ -1,4 +1,4 @@
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # GISC is documented here - https://www.msci.com/documents/1296102/11185224/GICS+Methodology+2020.pdf
 ENERGY = 10
