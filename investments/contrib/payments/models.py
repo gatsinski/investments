@@ -3,8 +3,8 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
-from django.utils.translation import ugettext
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from investments.models import TimestampedModel
 
@@ -28,7 +28,7 @@ class Payment(TimestampedModel):
         verbose_name_plural = _("Payments")
 
     def __str__(self):
-        return ugettext(f"Payment {self.uuid}")
+        return gettext(f"Payment {self.uuid}")
 
 
 class DividendPayment(Payment):
@@ -51,7 +51,7 @@ class DividendPayment(Payment):
         verbose_name_plural = _("Dividend Payments")
 
     def __str__(self):
-        return ugettext(
+        return gettext(
             f"Dividend Payment, position {self.position.position_id}, {self.position.security}"
         )
 
@@ -73,6 +73,6 @@ class InterestPayment(Payment):
         verbose_name_plural = _("Interest Payments")
 
     def __str__(self):
-        return ugettext(
+        return gettext(
             f"Interest Payment, position {self.position.position_id}, {self.position.security}"
         )

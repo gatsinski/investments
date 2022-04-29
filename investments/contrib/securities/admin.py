@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Count, F
 from django.shortcuts import render
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from investments import chart_constants
 from investments.utils.admin import get_chart_data
