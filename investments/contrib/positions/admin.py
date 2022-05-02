@@ -46,6 +46,7 @@ def custom_titled_filter(title, filter_class):
 
 @admin.register(Position)
 class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
+    change_form_template = "admin/positions/change_form.html"
     list_filter = (
         "security__user",
         "opened_at",

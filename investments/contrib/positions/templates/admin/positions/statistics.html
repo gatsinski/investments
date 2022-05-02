@@ -1,68 +1,71 @@
 {% extends "admin/base_site.html" %}
-{% load i18n l10n admin_urls static %}
+{% load i18n l10n admin_urls %}
 
-{% block extrahead %}{{ block.super }}
-<script src="{% url 'admin:jsi18n' %}"></script>
-{{ media }}
+{% block extrastyle %}
+  <style>
+    .table tbody th {
+      background-color: rgba(0,0,0,.05);
+    }
+  </style>
 {% endblock %}
 
-
-{% block extrastyle %}{{ block.super }}
-<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
-{% endblock %}
-
-{% block coltype %}colM{% endblock %}
-
-{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
+{% block content_title %}{% trans "Basic statistics" %}{% endblock %}
 
 {% block breadcrumbs %}
-<div class="breadcrumbs">
-<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
-&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
-&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
-&rsaquo; {% trans "Basic statistics" %}
-</div>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  </li>
+  <li class="breadcrumb-item active">{% trans "Basic statistics" %}</li>
+</ol>
 {% endblock %}
 
 {% block content %}
-<div class="results">
-  <table id="result_list">
-    <tbody>
-      <tr>
-        <th scope="row">{% trans "Open amount" %}</th>
-        <td>{{ data.open_amount|floatformat:2 }}</td>
-      </tr>
-      <tr>
-        <th scope="row">{% trans "Close amount" %}</th>
-        <td>{{ data.close_amount|floatformat:2 }}</td>
-      </tr>
-      <tr>
-        <th scope="row">{% trans "Unrealized amount" %}</th>
-        <td>{{ data.unrealized_amount|floatformat:2 }}</td>
-      </tr>
-      <tr>
-        <th scope="row">{% trans "Average open price" %}</th>
-        <td>{{ data.average_open_price|floatformat:2 }}</td>
-      </tr>
-      <tr>
-        <th scope="row">{% trans "Average close price" %}</th>
-        <td>{{ data.average_close_price|floatformat:2 }}</td>
-      </tr>
-      <tr>
-        <th scope="row">{% trans "Position count" %}</th>
-        <td>{{ data.position_count }}</td>
-      </tr>
-      <tr>
-        <th scope="row">{% trans "Units" %}</th>
-        <td>{{ data.units }}</td>
-      </tr>
-      <tr>
-        <th scope="row">{% trans "Profit/Loss" %}</th>
-        <td>{{ data.profit_or_loss|floatformat:2 }}</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="row">{% trans "Open amount" %}</th>
+              <td>{{ data.open_amount|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Close amount" %}</th>
+              <td>{{ data.close_amount|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Unrealized amount" %}</th>
+              <td>{{ data.unrealized_amount|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Average open price" %}</th>
+              <td>{{ data.average_open_price|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Average close price" %}</th>
+              <td>{{ data.average_close_price|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Position count" %}</th>
+              <td>{{ data.position_count }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Units" %}</th>
+              <td>{{ data.units }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Profit/Loss" %}</th>
+              <td>{{ data.profit_or_loss|floatformat:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-
-
 {% endblock %}

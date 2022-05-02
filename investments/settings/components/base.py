@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "debug_toolbar",
     "django_object_actions",
+    "jazzmin",
     # Django Apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -50,6 +51,7 @@ WSGI_APPLICATION = "investments.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
