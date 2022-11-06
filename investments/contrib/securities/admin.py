@@ -44,6 +44,7 @@ class StocksAdmin(SecuritiesAdmin):
     list_display = (
         "name",
         "symbol",
+        "aliases",
         "units",
         "sector",
         "user",

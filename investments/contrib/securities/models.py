@@ -29,6 +29,15 @@ class Security(TimestampedModel):
 
 class Stock(Security):
     symbol = models.CharField(_("Symbol"), max_length=254)
+    aliases = models.CharField(
+        _("Aliases"),
+        max_length=254,
+        help_text=_(
+            "Some brokers don't use the symbols in their reports. If such is the case, list all known aliases separated by comma."
+        ),
+        blank=True,
+    )
+
     sector = models.IntegerField(
         _("Sector"),
         choices=constants.SECTOR_CHOICES,
