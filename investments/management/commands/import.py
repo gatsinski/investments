@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 import openpyxl
 from django.contrib.auth import get_user_model
@@ -114,68 +115,97 @@ class Command(BaseCommand):
                 )
             else:
                 self.write_warning(
-                    f"Found existing payment for {position.uuid} ({position.security.name}) with id {payment.uuid}"
+                    f"Found existing payment for {position.position_id} ({position.security.name}) with id {payment.uuid}"
                 )
 
     def handle_positions(self, workbook, user, broker):
         worksheet = workbook["Account Activity"]
 
         for row in worksheet.iter_rows(min_row=2):
-            date = row[0]
-            aware_date = make_aware(datetime.strptime(date.value, "%d/%m/%Y %H:%M:%S"))
+            activity = {
+                "date": make_aware(
+                    datetime.strptime(row[0].value, "%d/%m/%Y %H:%M:%S")
+                ),
+                "type": row[1].value,
+                "symbol": row[2].value.split("/")[0] if row[2].value else "",
+                "amount": Decimal(str(row[3].value)),
+                "units": row[4].value,
+                "position_id": row[8].value,
+                "asset_type": row[9].value,
+            }
 
-            position_id = row[8].value
-            activity_type = row[1].value
-            raw_symbol = row[2].value
-            amount = row[3].value
-            units = row[4].value
-            asset_type = row[9].value
-
-            if not position_id:
+            if not activity["position_id"]:
                 continue
 
-            position = Position.objects.filter(position_id=position_id).first()
+            position = Position.objects.filter(
+                position_id=activity["position_id"]
+            ).first()
 
-            if position:
-                self.write_warning(f"Position {position_id} already exists. Skipping")
-                continue
+            if activity["type"] == "Open Position":
+                self.handle_opened_positions(activity, position, user, broker)
+            elif activity["type"] == "Position closed":
+                self.handle_closed_positions(activity, position, user, broker)
 
-            if activity_type != "Open Position":
-                continue
-
-            if asset_type != "Stocks":
-                self.write_warning(
-                    f"Encountered an asset of type {asset_type}. Skipping"
-                )
-                continue
-
-            symbol = raw_symbol.split("/")[0]
-
-            stock = Stock.objects.filter(symbol=symbol, user=user).first()
-
-            if not stock:
-                stock = Stock.objects.filter(
-                    aliases__contains=symbol, user=user
-                ).first()
-
-            if not stock:
-                self.write_error(
-                    f"Unable to find stock with symbol {symbol} belonging to user {user.email}. Skipping"
-                )
-                continue
-
-            position = Position.objects.create(
-                position_id=position_id,
-                units=units,
-                open_price=amount / float(units),
-                security=stock,
-                broker=broker,
-                opened_at=aware_date,
+    def handle_opened_positions(self, activity, position, user, broker):
+        if position:
+            self.write_warning(
+                f"Position {position.position_id} already exists. Skipping"
             )
+            return
 
-            self.write_success(
-                f"Successfully created position with id {position.position_id} - Buy { position.units } {position.security.name} at {position.open_price}"
+        if activity["asset_type"] != "Stocks":
+            self.write_warning(
+                f"Encountered an asset of type {activity['asset_type']}. Skipping"
             )
+            return
+
+        stock = Stock.objects.filter(symbol=activity["symbol"], user=user).first()
+
+        if not stock:
+            stock = Stock.objects.filter(
+                aliases__contains=activity["symbol"], user=user
+            ).first()
+
+        if not stock:
+            self.write_error(
+                f"Unable to find stock with symbol {activity['symbol']} belonging to user {user.email}. Skipping"
+            )
+            return
+
+        position = Position.objects.create(
+            position_id=activity["position_id"],
+            units=activity["units"],
+            open_price=activity["amount"] / Decimal(activity["units"]),
+            security=stock,
+            broker=broker,
+            opened_at=activity["date"],
+        )
+
+        self.write_success(
+            f"Successfully created position with id {position.position_id} - Buy {position.units} {position.security.name} at {position.open_price}"
+        )
+
+    def handle_closed_positions(self, activity, position, user, broker):
+        if not position:
+            self.write_error(f"Failed to find {activity['position_id']}. Skipping.")
+            return
+
+        if position.is_closed:
+            self.write_error(
+                f"Position {activity['position_id']} is already closed. Skipping."
+            )
+            return
+
+        units = Decimal(activity["units"])
+
+        position.close_price = position.open_price + activity["amount"] / units
+        position.closed_at = activity["date"]
+
+        position.save(update_fields=["close_price", "closed_at"])
+
+        self.write_success(
+            f"Successfully closed position with id {position.position_id} - {position.units} {position.security.name} at {position.close_price}"
+        )
 
     def write_success(self, message):
         self.stdout.write(self.style.SUCCESS(message))
