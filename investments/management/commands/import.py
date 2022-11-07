@@ -45,7 +45,7 @@ class Command(BaseCommand):
 
         workbook.close()
 
-        self.stdout.write(self.style.SUCCESS("Successfully imported all data"))
+        self.write_success("Successfully imported all data")
 
     def get_user(self, user_email):
         if user_email:
@@ -54,20 +54,16 @@ class Command(BaseCommand):
             if user:
                 return user
 
-            self.stdout.write(
-                self.style.ERROR(f"Unable to find the user with email {user_email}.")
-            )
+            self.write_error(f"Unable to find the user with email {user_email}.")
         else:
-            self.stdout.write(
-                self.style.WARNING("No user provided. Using the first available user.")
-            )
+            self.write_warning("No user provided. Using the first available user.")
 
             user = UserModel.objects.last()
 
             if user:
                 return user
 
-            self.stdout.write(self.style.ERROR("Unable to find user."))
+            self.write_error("Unable to find user.")
 
     def get_broker(self, broker_name, user):
         if broker_name:
@@ -76,14 +72,10 @@ class Command(BaseCommand):
             if broker:
                 return broker
 
-            self.stdout.write(
-                self.style.ERROR(f"Unable to find broker with name {broker_name}.")
-            )
+            self.write_error(f"Unable to find broker with name {broker_name}.")
         else:
-            self.stdout.write(
-                self.style.WARNING(
-                    f"No broker provided. Using the first broker belonging to {user.email}."
-                )
+            self.write_warning(
+                f"No broker provided. Using the first broker belonging to {user.email}."
             )
 
             broker = Broker.objects.filter(user=user).first()
@@ -91,11 +83,7 @@ class Command(BaseCommand):
             if broker:
                 return broker
 
-            self.stdout.write(
-                self.style.ERROR(
-                    f"Unable to find any broker belonging to {user.email}."
-                )
-            )
+            self.write_error(f"Unable to find any broker belonging to {user.email}.")
 
     def handle_dividends(self, workbook):
         worksheet = workbook["Dividends"]
@@ -110,9 +98,7 @@ class Command(BaseCommand):
             position = Position.objects.filter(position_id=position_id.value).first()
 
             if not position:
-                self.stdout.write(
-                    self.style.ERROR(f"Failed to find {position_id.value}. Skipping.")
-                )
+                self.write_error(f"Failed to find {position_id.value}. Skipping.")
                 continue
 
             payment, created = DividendPayment.objects.get_or_create(
@@ -122,17 +108,13 @@ class Command(BaseCommand):
             )
 
             if created:
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"Successfully created payment for {position.position_id} ({position.security.name}) "
-                        f"with received amount {payment.amount} recorded on {payment.recorded_on} with id {payment.uuid}."
-                    )
+                self.write_success(
+                    f"Successfully created payment for {position.position_id} ({position.security.name}) "
+                    f"with received amount {payment.amount} recorded on {payment.recorded_on} with id {payment.uuid}."
                 )
             else:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"Found existing payment for {position.uuid} ({position.security.name}) with id {payment.uuid}"
-                    )
+                self.write_warning(
+                    f"Found existing payment for {position.uuid} ({position.security.name}) with id {payment.uuid}"
                 )
 
     def handle_positions(self, workbook, user, broker):
@@ -155,21 +137,15 @@ class Command(BaseCommand):
             position = Position.objects.filter(position_id=position_id).first()
 
             if position:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"Position {position_id} already exists. Skipping"
-                    )
-                )
+                self.write_warning(f"Position {position_id} already exists. Skipping")
                 continue
 
             if activity_type != "Open Position":
                 continue
 
             if asset_type != "Stocks":
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"Encountered an asset of type {asset_type}. Skipping"
-                    )
+                self.write_warning(
+                    f"Encountered an asset of type {asset_type}. Skipping"
                 )
                 continue
 
@@ -183,10 +159,8 @@ class Command(BaseCommand):
                 ).first()
 
             if not stock:
-                self.stdout.write(
-                    self.style.ERROR(
-                        f"Unable to find stock with symbol {symbol} belonging to user {user.email}. Skipping"
-                    )
+                self.write_error(
+                    f"Unable to find stock with symbol {symbol} belonging to user {user.email}. Skipping"
                 )
                 continue
 
@@ -199,8 +173,15 @@ class Command(BaseCommand):
                 opened_at=aware_date,
             )
 
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"Successfully created position with id {position.position_id} - Buy { position.units } {position.security.name} at {position.open_price}"
-                )
+            self.write_success(
+                f"Successfully created position with id {position.position_id} - Buy { position.units } {position.security.name} at {position.open_price}"
             )
+
+    def write_success(self, message):
+        self.stdout.write(self.style.SUCCESS(message))
+
+    def write_warning(self, message):
+        self.stdout.write(self.style.WARNING(message))
+
+    def write_error(self, message):
+        self.stdout.write(self.style.ERROR(message))
