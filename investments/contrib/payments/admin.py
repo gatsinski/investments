@@ -61,27 +61,18 @@ class BasePaymentsAdmin(admin.ModelAdmin):
         "withheld_tax_display",
         "tag_links",
         "user_link",
-        "broker_link",
-        "created_at",
-        "updated_at",
     )
     list_filter = (
         "position__security__user",
         "recorded_on",
         "withheld_tax_rate",
-        "created_at",
-        "updated_at",
         "tags",
-        (
-            "position__broker__name",
-            get_custom_titled_filter(_("Brokers"), admin.FieldListFilter),
-        ),
         (
             "position__security__name",
             get_custom_titled_filter(_("Securities"), admin.FieldListFilter),
         ),
     )
-    search_fields = ("position__security", "position__broker", "notes")
+    search_fields = ("position__security", "notes")
     autocomplete_fields = ("position",)
     actions = [
         "show_daily_payments",
@@ -103,7 +94,7 @@ class BasePaymentsAdmin(admin.ModelAdmin):
         return mark_safe(
             '<a href="{}">{}</a>'.format(
                 reverse("admin:positions_position_change", args=(payment.position.pk,)),
-                payment.position,
+                payment.position.position_id,
             )
         )
 
@@ -176,20 +167,6 @@ class BasePaymentsAdmin(admin.ModelAdmin):
             '<a href="{}">{}</a>'.format(
                 reverse("admin:users_user_change", args=(user.pk,)),
                 user.email,
-            )
-        )
-
-    @admin.display(
-        ordering="position__broker",
-        description=_("Broker"),
-    )
-    def broker_link(self, payment):
-        broker = payment.position.broker
-
-        return mark_safe(
-            '<a href="{}">{}</a>'.format(
-                reverse("admin:brokers_broker_change", args=(broker.pk,)),
-                broker,
             )
         )
 
@@ -577,20 +554,6 @@ class DividendPaymentsAdmin(BasePaymentsAdmin):
     def __init__(self, model, admin_site):
         self.actions.append("show_sectors_by_received_amount")
         super().__init__(model, admin_site)
-
-    def get_list_display(self, request):
-        list_display = list(self.list_display)
-
-        list_display.insert(1, "type")
-
-        return list_display
-
-    def get_list_filter(self, request):
-        list_filter = list(self.list_filter)
-
-        list_filter.insert(1, "type")
-
-        return list_filter
 
     @admin.action(description=_("Show sectors grouped by received amount"))
     def show_sectors_by_received_amount(self, request, queryset):
