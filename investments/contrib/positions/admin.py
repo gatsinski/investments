@@ -25,7 +25,6 @@ from django_object_actions import DjangoObjectActions
 from investments import chart_constants
 from investments.contrib.securities.constants import SECTOR_CHOICES
 from investments.contrib.securities.models import Bond, Security
-from investments.contrib.tags.models import Tag
 from investments.utils.admin import get_chart_data
 
 from .admin_filters import StatusFilter
@@ -720,8 +719,6 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         form.base_fields["security"].queryset = Security.objects.filter(
             user=request.user
         )
-        form.base_fields["tags"].queryset = Tag.objects.filter(author=request.user)
-
         form.base_fields["broker"].initial = form.base_fields["broker"].queryset.first()
 
         return form

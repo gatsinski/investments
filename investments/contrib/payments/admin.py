@@ -24,7 +24,6 @@ from investments import chart_constants
 from investments.contrib.positions.models import Position
 from investments.contrib.securities.constants import SECTOR_CHOICES
 from investments.contrib.securities.models import Bond
-from investments.contrib.tags.models import Tag
 from investments.utils.admin import (
     get_all_days,
     get_all_months,
@@ -544,7 +543,6 @@ class BasePaymentsAdmin(admin.ModelAdmin):
         form.base_fields["position"].queryset = Position.objects.filter(
             security__user=request.user
         )
-        form.base_fields["tags"].queryset = Tag.objects.filter(author=request.user)
 
         return form
 
