@@ -23,7 +23,6 @@ from django.utils.translation import gettext_lazy as _
 from django_object_actions import DjangoObjectActions
 
 from investments import chart_constants
-from investments.contrib.brokers.models import Broker
 from investments.contrib.securities.constants import SECTOR_CHOICES
 from investments.contrib.securities.models import Bond, Security
 from investments.contrib.tags.models import Tag
@@ -52,11 +51,7 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         "opened_at",
         "closed_at",
         ("closed_at", StatusFilter),
-        "created_at",
-        "updated_at",
-        "tags",
         "security__stock__sector",
-        ("broker__name", custom_titled_filter(_("Brokers"), admin.FieldListFilter)),
         (
             "security__name",
             custom_titled_filter(_("Securities"), admin.FieldListFilter),
@@ -74,11 +69,7 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         "normalized_close_price",
         "close_amount",
         "profit_or_loss",
-        "tag_links",
         "user_link",
-        "broker_link",
-        "created_at",
-        "updated_at",
     )
 
     list_per_page = 100
@@ -177,20 +168,6 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         return position.profit_or_loss
 
     @admin.display(
-        description=_("Tags"),
-    )
-    def tag_links(self, position):
-        tag_links = [
-            '<a href="{}">{}</a>'.format(
-                reverse("admin:tags_tag_change", args=(tag.pk,)),
-                tag,
-            )
-            for tag in position.tags.all()
-        ]
-
-        return mark_safe(" ".join(tag_links))
-
-    @admin.display(
         ordering="security__user",
         description=_("User"),
     )
@@ -199,18 +176,6 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             '<a href="{}">{}</a>'.format(
                 reverse("admin:users_user_change", args=(position.security.user.pk,)),
                 position.security.user.email,
-            )
-        )
-
-    @admin.display(
-        ordering="broker",
-        description=_("Broker"),
-    )
-    def broker_link(self, position):
-        return mark_safe(
-            '<a href="{}">{}</a>'.format(
-                reverse("admin:brokers_broker_change", args=(position.broker.pk,)),
-                position.broker,
             )
         )
 
@@ -755,7 +720,6 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         form.base_fields["security"].queryset = Security.objects.filter(
             user=request.user
         )
-        form.base_fields["broker"].queryset = Broker.objects.filter(user=request.user)
         form.base_fields["tags"].queryset = Tag.objects.filter(author=request.user)
 
         form.base_fields["broker"].initial = form.base_fields["broker"].queryset.first()
