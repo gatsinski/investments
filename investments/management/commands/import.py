@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from decimal import Decimal
 
@@ -94,6 +95,9 @@ class Command(BaseCommand):
             aware_date = make_aware(datetime.strptime(date.value, "%d/%m/%Y %H:%M:%S"))
 
             received_dividend = row[2]
+            withheld_tax_rate = Decimal(re.findall(r"\d+", row[3].value)[0])
+            withheld_tax = Decimal(str(row[4].value))
+
             position_id = row[5]
 
             position = Position.objects.filter(position_id=position_id.value).first()
@@ -106,6 +110,10 @@ class Command(BaseCommand):
                 position=position,
                 amount=received_dividend.value,
                 recorded_on=aware_date,
+                defaults={
+                    "withheld_tax": withheld_tax,
+                    "withheld_tax_rate": withheld_tax_rate,
+                },
             )
 
             if created:
@@ -117,6 +125,16 @@ class Command(BaseCommand):
                 self.write_warning(
                     f"Found existing payment for {position.position_id} ({position.security.name}) with id {payment.uuid}"
                 )
+
+                if not payment.withheld_tax or not payment.withheld_tax_rate:
+                    payment.withheld_tax = withheld_tax
+                    payment.withheld_tax_rate = withheld_tax_rate
+                    payment.save(update_fields=("withheld_tax", "withheld_tax_rate"))
+
+                    self.write_success(
+                        f"The existing payment for {position.position_id} ({position.security.name}) with id {payment.uuid} "
+                        f"had no tax data. It was successfully updated with witheld tax {withheld_tax} and rate {withheld_tax_rate}%."
+                    )
 
     def handle_positions(self, workbook, user, broker):
         worksheet = workbook["Account Activity"]

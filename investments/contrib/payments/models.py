@@ -22,6 +22,18 @@ class Payment(TimestampedModel):
         verbose_name=_("Tags"),
         blank=True,
     )
+    withheld_tax = models.DecimalField(
+        _("Withheld tax"), max_digits=10, decimal_places=6, null=True
+    )
+    withheld_tax_rate = models.DecimalField(
+        _("Withheld tax rate"),
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        help_text=_(
+            "Due to rounding it's better to store the rate percentage as a separate field."
+        ),
+    )
 
     class Meta:
         verbose_name = _("Payment")

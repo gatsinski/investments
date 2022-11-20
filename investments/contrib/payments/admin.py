@@ -57,6 +57,8 @@ class BasePaymentsAdmin(admin.ModelAdmin):
         "security_link",
         "position_units",
         "recorded_on",
+        "withheld_tax_rate_display",
+        "withheld_tax_display",
         "tag_links",
         "user_link",
         "broker_link",
@@ -66,6 +68,7 @@ class BasePaymentsAdmin(admin.ModelAdmin):
     list_filter = (
         "position__security__user",
         "recorded_on",
+        "withheld_tax_rate",
         "created_at",
         "updated_at",
         "tags",
@@ -110,6 +113,24 @@ class BasePaymentsAdmin(admin.ModelAdmin):
     )
     def position_units(self, payment):
         return payment.position.units.normalize()
+
+    @admin.display(
+        ordering="withheld_tax_rate",
+        description=_("Tax rate"),
+    )
+    def withheld_tax_rate_display(self, payment):
+        return (
+            f"{round(payment.withheld_tax_rate)}%"
+            if payment.withheld_tax_rate is not None
+            else None
+        )
+
+    @admin.display(
+        ordering="withheld_tax",
+        description=_("Tax"),
+    )
+    def withheld_tax_display(self, payment):
+        return payment.withheld_tax.normalize() if payment.withheld_tax else None
 
     @admin.display(
         ordering="position__security",
