@@ -21,7 +21,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from investments import chart_constants
-from investments.contrib.positions.models import Position
 from investments.contrib.securities.constants import SECTOR_CHOICES
 from investments.contrib.securities.models import Bond
 from investments.utils.admin import (
@@ -536,15 +535,6 @@ class BasePaymentsAdmin(admin.ModelAdmin):
                 "tags",
             )
         )
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-
-        form.base_fields["position"].queryset = Position.objects.filter(
-            security__user=request.user
-        )
-
-        return form
 
 
 @admin.register(DividendPayment)
