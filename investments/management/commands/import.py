@@ -92,7 +92,7 @@ class Command(BaseCommand):
 
         for row in worksheet.iter_rows(min_row=2):
             date = row[0]
-            aware_date = make_aware(datetime.strptime(date.value, "%d/%m/%Y %H:%M:%S"))
+            aware_date = make_aware(datetime.strptime(date.value, "%d/%m/%Y"))
 
             received_dividend = row[2]
             withheld_tax_rate = Decimal(re.findall(r"\d+", row[3].value)[0])
