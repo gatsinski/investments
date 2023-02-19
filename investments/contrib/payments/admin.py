@@ -3,8 +3,9 @@ import json
 
 from django.contrib import admin
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models import CharField, F, Sum, Value
+from django.db.models import Avg, CharField, Count, F, FloatField, Sum, Value
 from django.db.models.functions import (
+    Cast,
     Concat,
     ExtractDay,
     ExtractMonth,
@@ -82,6 +83,7 @@ class BasePaymentsAdmin(admin.ModelAdmin):
         "show_yearly_payments",
         "show_yearly_payments_with_securities",
         "show_securities_by_received_amount",
+        "show_analytics",
     ]
 
     @admin.display(
@@ -489,6 +491,32 @@ class BasePaymentsAdmin(admin.ModelAdmin):
             data=chart_data,
             chart_name=_("Securities grouped by received amount"),
             chart_type=chart_constants.PIE_CHART,
+        )
+
+    @admin.action(description=_("Show analytics"))
+    def show_analytics(self, request, queryset):
+        data = queryset.aggregate(
+            total_received_amount=Sum("amount"),
+            total_withheld_tax=Sum("withheld_tax"),
+            average_tax_rate=Avg("withheld_tax_rate"),
+            average_amount=Avg("amount"),
+            payment_count=Count("uuid"),
+            position_count=Count("position", distinct=True),
+            # Without cast the result will be integer
+            payments_per_position=Cast(Count("uuid"), FloatField())
+            / Cast(Count("position", distinct=True), FloatField()),
+            received_amount_per_position=Sum("amount")
+            / Count("position", distinct=True),
+        )
+
+        return render(
+            request,
+            "admin/payments/statistics.html",
+            context={
+                **self.admin_site.each_context(request),
+                "opts": self.model._meta,
+                "data": data,
+            },
         )
 
     def show_payments(

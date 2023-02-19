@@ -1,0 +1,71 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n admin_urls %}
+
+{% block extrastyle %}
+  <style>
+    .table tbody th {
+      background-color: rgba(0,0,0,.05);
+    }
+  </style>
+{% endblock %}
+
+{% block content_title %}{% trans "Basic statistics" %}{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  </li>
+  <li class="breadcrumb-item active">{% trans "Basic statistics" %}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="row">{% trans "Received amount" %}</th>
+              <td>{{ data.total_received_amount|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Withheld tax" %}</th>
+              <td>{{ data.total_withheld_tax|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Average withheld tax rate" %}</th>
+              <td>{{ data.average_tax_rate|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Average amount per payment" %}</th>
+              <td>{{ data.average_amount|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Payment count" %}</th>
+              <td>{{ data.payment_count }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Position count" %}</th>
+              <td>{{ data.position_count }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Payments per position" %}</th>
+              <td>{{ data.payments_per_position }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Received amount per position" %}</th>
+              <td>{{ data.received_amount_per_position|floatformat:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

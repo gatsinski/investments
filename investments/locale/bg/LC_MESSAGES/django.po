@@ -201,6 +201,7 @@ msgid "Recorded on"
 msgstr "Отчетен на"
 
 #: investments/contrib/payments/models.py:26
+#: investments/contrib/payments/templates/admin/payments/statistics.html:38
 msgid "Withheld tax"
 msgstr "Удържан данък"
 
@@ -269,7 +270,26 @@ msgstr ""
 "Плащане на лихва, позиция {self.position.position_id}, {self.position."
 "security}"
 
-#: investments/contrib/positions/admin.py:131
+#: investments/contrib/payments/templates/admin/payments/statistics.html:42
+msgid "Average withheld tax rate"
+msgstr "Средна данъчна ставка"
+
+#: investments/contrib/payments/templates/admin/payments/statistics.html:46
+msgid "Average amount per payment"
+msgstr "Средна сума на плащане"
+
+#: investments/contrib/payments/templates/admin/payments/statistics.html:50
+msgid "Payment count"
+msgstr "Брой плащания"
+
+#: investments/contrib/payments/templates/admin/payments/statistics.html:58
+msgid "Payments per position"
+msgstr "Плащания на позиция"
+
+#: investments/contrib/payments/templates/admin/payments/statistics.html:62
+msgid "Received amount per position"
+msgstr "Получена сума на позиция"
+
 #: investments/contrib/securities/models.py:42
 msgid "Sector"
 msgstr "Сектор"
