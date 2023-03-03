@@ -45,10 +45,38 @@ msgstr "Брокер"
 msgid "Brokers"
 msgstr "Брокери"
 
-#: investments/contrib/payments/admin.py:81
-#: investments/contrib/positions/admin.py:61
-#: investments/contrib/positions/admin.py:590
-#: investments/contrib/positions/admin.py:615
+#: investments/contrib/currencies/models.py:16
+msgid "ISO code"
+msgstr "ISO код"
+
+#: investments/contrib/currencies/models.py:17
+msgid "Nominal"
+msgstr "Номинал"
+
+#: investments/contrib/currencies/models.py:20
+msgid "Currency"
+msgstr "Валута"
+
+#: investments/contrib/currencies/models.py:21
+msgid "Currencies"
+msgstr "Валути"
+
+#: investments/contrib/currencies/models.py:31
+msgid "Date"
+msgstr "Дата"
+
+#: investments/contrib/currencies/models.py:33
+msgid "Rate"
+msgstr "Курс"
+
+#: investments/contrib/currencies/models.py:40
+msgid "Exchange rate"
+msgstr "Обменен курс"
+
+#: investments/contrib/currencies/models.py:41
+msgid "Exchange rates"
+msgstr "Обменни курсове"
+
 #: investments/contrib/securities/models.py:24
 msgid "Securities"
 msgstr "Ценни книжа"

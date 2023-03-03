@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "investments.contrib.securities.apps.SecuritiesConfig",
     "investments.contrib.positions.apps.PositionsConfig",
     "investments.contrib.payments.apps.PaymentsConfig",
+    "investments.contrib.currencies.apps.CurrenciesConfig",
 ]
 
 ROOT_URLCONF = "investments.urls"
