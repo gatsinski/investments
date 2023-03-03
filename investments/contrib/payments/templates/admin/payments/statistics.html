@@ -39,6 +39,10 @@
               <td>{{ data.total_withheld_tax|floatformat:2 }}</td>
             </tr>
             <tr>
+              <th scope="row">{% trans "Gross amount" %}</th>
+              <td>{{ data.gross_amount|floatformat:2 }}</td>
+            </tr>
+            <tr>
               <th scope="row">{% trans "Average withheld tax rate" %}</th>
               <td>{{ data.average_tax_rate|floatformat:2 }}</td>
             </tr>

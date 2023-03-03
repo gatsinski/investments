@@ -271,6 +271,10 @@ msgstr ""
 "security}"
 
 #: investments/contrib/payments/templates/admin/payments/statistics.html:42
+msgid "Gross amount"
+msgstr "Брутна сума"
+
+#: investments/contrib/payments/templates/admin/payments/statistics.html:42
 msgid "Average withheld tax rate"
 msgstr "Средна данъчна ставка"
 

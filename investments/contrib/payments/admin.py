@@ -498,6 +498,7 @@ class BasePaymentsAdmin(admin.ModelAdmin):
         data = queryset.aggregate(
             total_received_amount=Sum("amount"),
             total_withheld_tax=Sum("withheld_tax"),
+            gross_amount=Sum("amount") + Sum("withheld_tax"),
             average_tax_rate=Avg("withheld_tax_rate"),
             average_amount=Avg("amount"),
             payment_count=Count("uuid"),
