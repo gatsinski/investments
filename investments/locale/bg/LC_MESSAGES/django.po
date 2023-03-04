@@ -196,6 +196,10 @@ msgstr "Получена сума"
 msgid "Securities grouped by received amount"
 msgstr "Ценни книжа групирани по получена сума"
 
+#: investments/contrib/payments/admin.py:499
+msgid "Show aggregated report"
+msgstr "Покажи агрегиран доклад"
+
 #: investments/contrib/payments/admin.py:529
 msgid "Show payment report"
 msgstr "Покажи доклад на плащанията"
@@ -301,6 +305,10 @@ msgid ""
 msgstr ""
 "Плащане на лихва, позиция {self.position.position_id}, {self.position."
 "security}"
+
+#: investments/contrib/payments/templates/admin/payments/aggregated_report.html:12
+msgid "Aggregated report"
+msgstr "Агрегиран доклад"
 
 #: investments/contrib/payments/templates/admin/payments/statistics.html:42
 msgid "Gross amount"

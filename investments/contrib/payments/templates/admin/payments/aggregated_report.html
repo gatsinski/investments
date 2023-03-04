@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n l10n admin_urls %}
+{% load i18n l10n admin_urls rates %}
 
 {% block extrastyle %}
   <style>
@@ -9,7 +9,7 @@
   </style>
 {% endblock %}
 
-{% block content_title %}{% trans "Basic statistics" %}{% endblock %}
+{% block content_title %}{% trans "Aggregated report" %}{% endblock %}
 
 {% block breadcrumbs %}
 <ol class="breadcrumb">
@@ -19,7 +19,7 @@
   <li class="breadcrumb-item">
     <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
   </li>
-  <li class="breadcrumb-item active">{% trans "Basic statistics" %}</li>
+  <li class="breadcrumb-item active">{% trans "Aggregated report" %}</li>
 </ol>
 {% endblock %}
 
@@ -31,25 +31,50 @@
         <table class="table">
           <tbody>
             <tr>
+              <th scope="row"></th>
+              <td>{% trans "USD" %}</td>
+              <td>{% trans "BGN" %}</td>
+            </tr>
+            <tr>
               <th scope="row">{% trans "Received amount" %}</th>
               <td>{{ data.total_received_amount|floatformat:2 }}</td>
+              <td>{{ data.total_received_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
+
             </tr>
             <tr>
               <th scope="row">{% trans "Withheld tax" %}</th>
               <td>{{ data.total_withheld_tax|floatformat:2 }}</td>
+              <td>{{ data.total_withheld_tax|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
             <tr>
               <th scope="row">{% trans "Gross amount" %}</th>
               <td>{{ data.gross_amount|floatformat:2 }}</td>
+              <td>{{ data.gross_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
             <tr>
               <th scope="row">{% trans "Average withheld tax rate" %}</th>
               <td>{{ data.average_tax_rate|floatformat:2 }}</td>
+              <td>{{ data.average_tax_rate|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
             <tr>
               <th scope="row">{% trans "Average amount per payment" %}</th>
               <td>{{ data.average_amount|floatformat:2 }}</td>
+              <td>{{ data.average_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
+            <tr>
+              <th scope="row">{% trans "Received amount per position" %}</th>
+              <td>{{ data.received_amount_per_position|floatformat:2 }}</td>
+              <td>{{ data.received_amount_per_position|to_local_currency:exchange_rate|floatformat:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table">
+          <tbody>
             <tr>
               <th scope="row">{% trans "Payment count" %}</th>
               <td>{{ data.payment_count }}</td>
@@ -60,11 +85,7 @@
             </tr>
             <tr>
               <th scope="row">{% trans "Payments per position" %}</th>
-              <td>{{ data.payments_per_position }}</td>
-            </tr>
-            <tr>
-              <th scope="row">{% trans "Received amount per position" %}</th>
-              <td>{{ data.received_amount_per_position|floatformat:2 }}</td>
+              <td>{{ data.payments_per_position|floatformat:0 }}</td>
             </tr>
           </tbody>
         </table>

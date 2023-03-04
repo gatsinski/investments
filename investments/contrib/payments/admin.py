@@ -85,7 +85,7 @@ class BasePaymentsAdmin(admin.ModelAdmin):
         "show_yearly_payments",
         "show_yearly_payments_with_securities",
         "show_securities_by_received_amount",
-        "show_analytics",
+        "show_aggregated_report",
         "show_payment_report",
     ]
 
@@ -496,8 +496,8 @@ class BasePaymentsAdmin(admin.ModelAdmin):
             chart_type=chart_constants.PIE_CHART,
         )
 
-    @admin.action(description=_("Show analytics"))
-    def show_analytics(self, request, queryset):
+    @admin.action(description=_("Show aggregated report"))
+    def show_aggregated_report(self, request, queryset):
         data = queryset.aggregate(
             total_received_amount=Sum("amount"),
             total_withheld_tax=Sum("withheld_tax"),
@@ -513,13 +513,18 @@ class BasePaymentsAdmin(admin.ModelAdmin):
             / Count("position", distinct=True),
         )
 
+        exchange_rate = (
+            ExchangeRate.objects.filter(currency__code="USD").order_by("date").last()
+        )
+
         return render(
             request,
-            "admin/payments/statistics.html",
+            "admin/payments/aggregated_report.html",
             context={
                 **self.admin_site.each_context(request),
                 "opts": self.model._meta,
                 "data": data,
+                "exchange_rate": exchange_rate.rate,
             },
         )
 
