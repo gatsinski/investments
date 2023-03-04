@@ -196,6 +196,10 @@ msgstr "Получена сума"
 msgid "Securities grouped by received amount"
 msgstr "Ценни книжа групирани по получена сума"
 
+#: investments/contrib/payments/admin.py:529
+msgid "Show payment report"
+msgstr "Покажи доклад на плащанията"
+
 #: investments/contrib/payments/admin.py:599
 msgid "Show sectors grouped by received amount"
 msgstr "Покажи сектори групирани по получена сума"
@@ -302,6 +306,14 @@ msgstr ""
 msgid "Gross amount"
 msgstr "Брутна сума"
 
+#: investments/contrib/payments/templates/admin/payments/aggregated_report.html:35
+msgid "USD"
+msgstr "Щатски долар"
+
+#: investments/contrib/payments/templates/admin/payments/aggregated_report.html:36
+msgid "BGN"
+msgstr "Български лев"
+
 #: investments/contrib/payments/templates/admin/payments/statistics.html:42
 msgid "Average withheld tax rate"
 msgstr "Средна данъчна ставка"
@@ -321,6 +333,23 @@ msgstr "Плащания на позиция"
 #: investments/contrib/payments/templates/admin/payments/statistics.html:62
 msgid "Received amount per position"
 msgstr "Получена сума на позиция"
+
+#: investments/contrib/payments/templates/admin/payments/payment_report.html:12
+#: investments/contrib/payments/templates/admin/payments/payment_report.html:22
+msgid "Payment report"
+msgstr "Доклад на плащанията"
+
+#: investments/contrib/payments/templates/admin/payments/payment_report.html:41
+msgid "Received amount (BGN)"
+msgstr "Получена сума (лева)"
+
+#: investments/contrib/payments/templates/admin/payments/payment_report.html:42
+msgid "Withheld tax (BGN)"
+msgstr "Удържан данък (лева)"
+
+#: investments/contrib/payments/templates/admin/payments/payment_report.html:43
+msgid "Gross amount (BGN)"
+msgstr "Брутна сума (лева)"
 
 #: investments/contrib/securities/models.py:42
 msgid "Sector"
@@ -734,3 +763,7 @@ msgstr "Обновено на"
 #: investments/settings/components/jazzmin.py:7
 msgid "Investments"
 msgstr "Инвестиции"
+
+#: investments/templatetags/rates.py:11
+msgid "No exchange rate found"
+msgstr "Няма намерен обменен курс"
