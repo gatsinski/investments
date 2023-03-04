@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n l10n admin_urls rates %}
+{% load i18n l10n admin_urls rates taxes %}
 
 {% block extrastyle %}
   <style>
@@ -50,6 +50,12 @@
               <th scope="row">{% trans "Gross amount" %}</th>
               <td>{{ data.gross_amount|floatformat:2 }}</td>
               <td>{{ data.gross_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Tax due" %}</th>
+              {% calculate_aggregated_tax data.gross_untaxed_amount as aggregated_tax  %}
+              <td>{{ aggregated_tax|floatformat:2}}</td>
+              <td>{{ aggregated_tax|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
             <tr>
               <th scope="row">{% trans "Average withheld tax rate" %}</th>

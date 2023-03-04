@@ -4,7 +4,17 @@ from datetime import timedelta
 
 from django.contrib import admin
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models import Avg, CharField, Count, F, FloatField, Sum, Value
+from django.db.models import (
+    Avg,
+    Case,
+    CharField,
+    Count,
+    F,
+    FloatField,
+    Sum,
+    Value,
+    When,
+)
 from django.db.models.functions import (
     Cast,
     Concat,
@@ -502,6 +512,7 @@ class BasePaymentsAdmin(admin.ModelAdmin):
             total_received_amount=Sum("amount"),
             total_withheld_tax=Sum("withheld_tax"),
             gross_amount=Sum("amount") + Sum("withheld_tax"),
+            gross_untaxed_amount=Sum(Case(When(withheld_tax=0, then="amount"))),
             average_tax_rate=Avg("withheld_tax_rate"),
             average_amount=Avg("amount"),
             payment_count=Count("uuid"),

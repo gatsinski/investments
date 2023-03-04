@@ -1,9 +1,9 @@
 {% extends "admin/base_site.html" %}
-{% load i18n l10n admin_urls rates %}
+{% load i18n l10n admin_urls rates taxes %}
 
 {% block extrastyle %}
   <style>
-    table th:nth-child(4), table td:nth-child(4), table th:nth-child(7), table td:nth-child(7) {
+    table th:nth-child(4), table td:nth-child(4), table th:nth-child(8), table td:nth-child(8) {
       border-left: 2px solid #CCC;
     }
   </style>
@@ -37,10 +37,12 @@
               <th scope="col">{% trans "Received amount" %}</th>
               <th scope="col">{% trans "Withheld tax" %}</th>
               <th scope="col">{% trans "Gross amount" %}</th>
+              <th scope="col">{% trans "Tax due" %}</th>
               <th scope="col">{% trans "Exchange rate" %}</th>
               <th scope="col">{% trans "Received amount (BGN)" %}</th>
               <th scope="col">{% trans "Withheld tax (BGN)" %}</th>
               <th scope="col">{% trans "Gross amount (BGN)" %}</th>
+              <th scope="col">{% trans "Tax due (BGN)" %}</th>
           </thead>
           <tbody>
             {% for row in data %}
@@ -52,10 +54,12 @@
               <td>{{ row.total_received_amount|floatformat:2 }}</td>
               <td>{{ row.total_withheld_tax|floatformat:2 }}</td>
               <td>{{ row.gross_amount|floatformat:2 }}</td>
+              <td>{{ row|calculate_tax|floatformat:2 }}</td>
               <td>{{ exchange_rate }}</td>
               <td>{{ row.total_received_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
               <td>{{ row.total_withheld_tax|to_local_currency:exchange_rate|floatformat:2 }}</td>
               <td>{{ row.gross_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
+              <td>{{ row|calculate_tax|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
             {% endfor %}
           </tbody>

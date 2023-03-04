@@ -347,7 +347,10 @@ msgstr "Получена сума на позиция"
 msgid "Payment report"
 msgstr "Доклад на плащанията"
 
-#: investments/contrib/payments/templates/admin/payments/payment_report.html:41
+#: investments/contrib/payments/templates/admin/payments/payment_report.html:40
+msgid "Tax due"
+msgstr "Дължим данък"
+
 msgid "Received amount (BGN)"
 msgstr "Получена сума (лева)"
 
@@ -358,6 +361,10 @@ msgstr "Удържан данък (лева)"
 #: investments/contrib/payments/templates/admin/payments/payment_report.html:43
 msgid "Gross amount (BGN)"
 msgstr "Брутна сума (лева)"
+
+#: investments/contrib/payments/templates/admin/payments/payment_report.html:45
+msgid "Tax due (BGN)"
+msgstr "Дължим данък (лева)"
 
 #: investments/contrib/securities/models.py:42
 msgid "Sector"
