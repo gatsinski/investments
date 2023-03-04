@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n l10n admin_urls %}
+{% load i18n l10n admin_urls rates taxes %}
 
 {% block extrastyle %}
   <style>
@@ -31,25 +31,60 @@
         <table class="table">
           <tbody>
             <tr>
+              <th scope="row"></th>
+              <td>{% trans "USD" %}</td>
+              <td>{% trans "BGN" %}</td>
+            </tr>
+            <tr>
               <th scope="row">{% trans "Open amount" %}</th>
               <td>{{ data.open_amount|floatformat:2 }}</td>
+              <td>{{ data.open_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
             <tr>
               <th scope="row">{% trans "Close amount" %}</th>
               <td>{{ data.close_amount|floatformat:2 }}</td>
+              <td>{{ data.close_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
             <tr>
               <th scope="row">{% trans "Unrealized amount" %}</th>
               <td>{{ data.unrealized_amount|floatformat:2 }}</td>
+              <td>{{ data.unrealized_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
             <tr>
               <th scope="row">{% trans "Average open price" %}</th>
               <td>{{ data.average_open_price|floatformat:2 }}</td>
+              <td>{{ data.average_open_price|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
             <tr>
               <th scope="row">{% trans "Average close price" %}</th>
               <td>{{ data.average_close_price|floatformat:2 }}</td>
+              <td>{{ data.average_close_price|to_local_currency:exchange_rate|floatformat:2 }}</td>
             </tr>
+            <tr>
+              <th scope="row">{% trans "Profit/Loss" %}</th>
+              <td>{{ data.profit_or_loss|floatformat:2 }}</td>
+              <td>{{ data.profit_or_loss|to_local_currency:exchange_rate|floatformat:2 }}</td>
+            </tr>
+            <tr>
+              <th scope="row">{% trans "Tax due" %}</th>
+              {% if data.profit_or_loss > 0 %}
+                {% calculate_aggregated_tax data.profit_or_loss as aggregated_tax  %}
+                <td>{{ aggregated_tax|floatformat:2 }}</td>
+                <td>{{ aggregated_tax|to_local_currency:exchange_rate|floatformat:2 }}</td>
+              {% else %}
+                <td>{{ 0|floatformat:2 }}</td>
+                <td>{{ 0|floatformat:2 }}</td>
+              {% endif %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table">
+          <tbody>
             <tr>
               <th scope="row">{% trans "Position count" %}</th>
               <td>{{ data.position_count }}</td>
@@ -59,8 +94,8 @@
               <td>{{ data.units }}</td>
             </tr>
             <tr>
-              <th scope="row">{% trans "Profit/Loss" %}</th>
-              <td>{{ data.profit_or_loss|floatformat:2 }}</td>
+              <th scope="row">{% trans "Exchange rate" %}</th>
+              <td>{{ exchange_rate }}</td>
             </tr>
           </tbody>
         </table>

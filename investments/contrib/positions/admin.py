@@ -23,6 +23,7 @@ from django.utils.translation import gettext_lazy as _
 from django_object_actions import DjangoObjectActions
 
 from investments import chart_constants
+from investments.contrib.currencies.models import ExchangeRate
 from investments.contrib.securities.constants import SECTOR_CHOICES
 from investments.contrib.securities.models import Bond, Security
 from investments.utils.admin import get_chart_data
@@ -96,7 +97,7 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         "show_quarterly_closed_positions",
         "show_securities_by_invested_amount",
         "show_sectors_by_invested_amount",
-        "show_analytics",
+        "show_aggregated_report",
     ]
     change_actions = ("close_position", "open_position")
 
@@ -609,8 +610,8 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             context=context,
         )
 
-    @admin.action(description=_("Show analytics"))
-    def show_analytics(self, request, queryset):
+    @admin.action(description=_("Show aggregated report"))
+    def show_aggregated_report(self, request, queryset):
         open_amount = F("open_price") * F("units")
         close_amount = F("close_price") * F("units")
 
@@ -630,13 +631,18 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             ),
         )
 
+        exchange_rate = (
+            ExchangeRate.objects.filter(currency__code="USD").order_by("date").last()
+        )
+
         return render(
             request,
-            "admin/positions/statistics.html",
+            "admin/positions/aggregated_report.html",
             context={
                 **self.admin_site.each_context(request),
                 "opts": self.model._meta,
                 "data": data,
+                "exchange_rate": exchange_rate.rate,
             },
         )
 

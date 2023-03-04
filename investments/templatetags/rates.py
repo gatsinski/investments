@@ -16,4 +16,4 @@ def get_local_currency_rate(date, rates):
 
 @register.filter
 def to_local_currency(value, rate):
-    return value * rate if rate else None
+    return value * rate if rate and value else None
