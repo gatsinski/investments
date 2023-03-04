@@ -1,0 +1,96 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n admin_urls rates taxes %}
+
+{% block extrastyle %}
+  <style>
+    table th:nth-child(4), table td:nth-child(4) {
+      border-left: 2px solid #CCC;
+    }
+  </style>
+{% endblock %}
+
+{% block content_title %}
+  {% if is_in_local_currency %}
+    {% trans "Report in BGN" %}
+  {% else %}
+    {% trans "Report in USD" %}
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  </li>
+  <li class="breadcrumb-item active">
+    {% if is_in_local_currency %}
+      {% trans "Report in BGN" %}
+    {% else %}
+      {% trans "Report in USD" %}
+    {% endif %}
+  </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">{% trans "Date" %}</th>
+              <th scope="col">{% trans "Security" %}</th>
+              <th scope="col">{% trans "Open amount" %}</th>
+              <th scope="col">{% trans "Close amount" %}</th>
+              <th scope="col">{% trans "Profit/Loss" %}</th>
+              <th scope="col">{% trans "Unrealized amount" %}</th>
+              <th scope="col">{% trans "Average open price" %}</th>
+              <th scope="col">{% trans "Average close price" %}</th>
+              {% if is_in_local_currency %}
+              <th scope="col">{% trans "Exchange rate" %}</th>
+              {% endif %}
+              <th scope="col">{% trans "Units" %}</th>
+              <th scope="col">{% trans "Positions" %}</th>
+          </thead>
+          <tbody>
+            {% for row in data %}
+            {% if is_in_local_currency %}
+            {% get_local_currency_rate row.opened_at__date exchange_rates as exchange_rate %}
+            {% endif %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ row.opened_at__date }}</td>
+              <td>{{ row.security__name }}</td>
+              {% if is_in_local_currency %}
+              <td>{{ row.open_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
+              <td>{{ row.close_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
+              <td>{{ row.profit_or_loss|to_local_currency:exchange_rate|floatformat:2 }}</td>
+              <td>{{ row.unrealized_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
+              <td>{{ row.average_open_price|to_local_currency:exchange_rate|floatformat:2 }}</td>
+              <td>{{ row.average_close_price|to_local_currency:exchange_rate|floatformat:2 }}</td>
+              <td>{{ exchange_rate }}</td>
+              {% else %}
+              <td>{{ row.open_amount|floatformat:2 }}</td>
+              <td>{{ row.close_amount|floatformat:2 }}</td>
+              <td>{{ row.profit_or_loss|floatformat:2 }}</td>
+              <td>{{ row.unrealized_amount|floatformat:2 }}</td>
+              <td>{{ row.average_open_price|floatformat:2 }}</td>
+              <td>{{ row.average_close_price|floatformat:2 }}</td>
+              {% endif %}
+              <td>{{ row.units.normalize }}</td>
+              <td>{{ row.position_count }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

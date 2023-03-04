@@ -531,9 +531,13 @@ msgstr "Покажи сектори групирани по инвестиран
 msgid "Sectors grouped by invested amount"
 msgstr "Сектори групирани по инвестирана сума"
 
-#: investments/contrib/positions/admin.py:647
-msgid "Show analytics"
-msgstr "Покажи анализ"
+#: investments/contrib/positions/admin.py:652
+msgid "Show report in BGN"
+msgstr "Покажи доклад в лева"
+
+#: investments/contrib/positions/admin.py:657
+msgid "Show report in USD"
+msgstr "Покажи доклад в долари"
 
 #: investments/contrib/positions/admin.py:680
 msgid "The position is already closed"
@@ -629,7 +633,15 @@ msgstr "Брой позиции"
 msgid "Profit/Loss"
 msgstr "Печалба/Загуба"
 
-#: investments/contrib/securities/admin.py:70
+
+#: investments/contrib/positions/templates/admin/positions/position_report.html:14
+msgid "Report in BGN"
+msgstr "Доклад в лева"
+
+#: investments/contrib/positions/templates/admin/positions/position_report.html:16
+msgid "Report in USD"
+msgstr "Доклад в долари"
+
 msgid "Show sectors grouped by number of companies"
 msgstr "Покажи сектори групирани по брой компании"
 

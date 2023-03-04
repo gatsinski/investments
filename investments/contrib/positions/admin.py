@@ -1,4 +1,5 @@
 import json
+from datetime import timedelta
 
 from django.contrib import admin
 from django.contrib.admin import helpers
@@ -98,6 +99,8 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         "show_securities_by_invested_amount",
         "show_sectors_by_invested_amount",
         "show_aggregated_report",
+        "show_local_currency_position_report",
+        "show_position_report",
     ]
     change_actions = ("close_position", "open_position")
 
@@ -643,6 +646,87 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
                 "opts": self.model._meta,
                 "data": data,
                 "exchange_rate": exchange_rate.rate,
+            },
+        )
+
+    @admin.action(description=_("Show report in BGN"))
+    def show_local_currency_position_report(self, request, queryset):
+        return self.show_position_report(request, queryset, is_in_local_currency=True)
+
+    @admin.action(description=_("Show report in USD"))
+    def show_position_report(self, request, queryset, is_in_local_currency=False):
+        open_amount = F("open_price") * F("units")
+        close_amount = F("close_price") * F("units")
+
+        data = (
+            queryset.values("opened_at__date", "security__name")
+            .annotate(
+                open_amount=Sum(open_amount),
+                close_amount=Sum(close_amount),
+                unrealized_amount=Sum(
+                    Case(When(close_price__isnull=True, then=open_amount))
+                ),
+                profit_or_loss=(
+                    Sum(Case(When(close_price__isnull=False, then=close_amount)))
+                    - Sum(Case(When(close_price__isnull=False, then=open_amount)))
+                ),
+                average_open_price=Avg("open_price"),
+                average_close_price=Avg("close_price"),
+                units=Sum("units"),
+                position_count=Count("uuid"),
+            )
+            .order_by("opened_at__date")
+        )
+
+        if is_in_local_currency:
+            start_date = data.first()["opened_at__date"]
+            end_date = data.last()["opened_at__date"]
+
+            exchange_rates_queryset = ExchangeRate.objects.filter(
+                currency__code="USD",
+                # In case there is no rate for the start rate.
+                # There should be more than 7 days without rates
+                date__gte=start_date - timedelta(days=7),
+                date__lte=end_date,
+            )
+
+            exchange_rates = {
+                rate.date.isoformat(): rate for rate in exchange_rates_queryset
+            }
+
+            current_date = start_date
+
+            def get_rate(date):
+                key = date.isoformat()
+                return exchange_rates.get(key)
+
+            while current_date <= end_date:
+                exchange_rate = None
+                lookout_date = current_date
+
+                exchange_rate = get_rate(lookout_date)
+
+                if exchange_rate:
+                    current_date += timedelta(days=1)
+                    continue
+
+                while not exchange_rate:
+                    # Mooving back in time until we find the rate
+                    lookout_date -= timedelta(days=1)
+                    exchange_rate = get_rate(lookout_date)
+
+                exchange_rates[current_date.isoformat()] = exchange_rate
+                current_date += timedelta(days=1)
+
+        return render(
+            request,
+            "admin/positions/position_report.html",
+            context={
+                **self.admin_site.each_context(request),
+                "opts": self.model._meta,
+                "data": data,
+                "exchange_rates": exchange_rates if is_in_local_currency else None,
+                "is_in_local_currency": is_in_local_currency,
             },
         )
 
