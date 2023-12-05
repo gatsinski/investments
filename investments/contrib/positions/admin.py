@@ -627,7 +627,7 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
             average_open_price=Avg("open_price"),
             average_close_price=Avg("close_price"),
             position_count=Count("uuid"),
-            units=Sum("units"),
+            units_sum=Sum("units"),
             profit_or_loss=(
                 Sum(Case(When(close_price__isnull=False, then=close_amount)))
                 - Sum(Case(When(close_price__isnull=False, then=open_amount)))

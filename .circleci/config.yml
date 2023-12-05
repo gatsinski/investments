@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.10
+      - image: python:3.12
         environment:
           PIPENV_VENV_IN_PROJECT: true
           DJANGO_ENV: test

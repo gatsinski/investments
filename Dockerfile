@@ -1,4 +1,4 @@
-FROM python:3.9.9-buster
+FROM python:3.12-bullseye
 RUN apt update && apt install -y gettext
 RUN pip3 install pipenv gunicorn
 
