@@ -659,7 +659,7 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         close_amount = F("close_price") * F("units")
 
         data = (
-            queryset.values("opened_at__date", "security__name")
+            queryset.values("opened_at__date", "closed_at__date", "security__name")
             .annotate(
                 open_amount=Sum(open_amount),
                 close_amount=Sum(close_amount),
@@ -680,7 +680,14 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
 
         if is_in_local_currency:
             start_date = data.first()["opened_at__date"]
-            end_date = data.last()["opened_at__date"]
+
+            last_opened_at_date = data.last()["opened_at__date"]
+            last_closed_at_date = data.last()["closed_at__date"]
+            end_date = (
+                last_opened_at_date
+                if not last_closed_at_date or last_opened_at_date > last_closed_at_date
+                else last_closed_at_date
+            )
 
             exchange_rates_queryset = ExchangeRate.objects.filter(
                 currency__code="USD",

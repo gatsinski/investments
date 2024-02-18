@@ -44,7 +44,8 @@
           <thead>
             <tr>
               <th scope="col"></th>
-              <th scope="col">{% trans "Date" %}</th>
+              <th scope="col">{% trans "Open date" %}</th>
+              <th scope="col">{% trans "Close date" %}</th>
               <th scope="col">{% trans "Security" %}</th>
               <th scope="col">{% trans "Open amount" %}</th>
               <th scope="col">{% trans "Close amount" %}</th>
@@ -53,7 +54,9 @@
               <th scope="col">{% trans "Average open price" %}</th>
               <th scope="col">{% trans "Average close price" %}</th>
               {% if is_in_local_currency %}
-              <th scope="col">{% trans "Exchange rate" %}</th>
+              <th scope="col">{% trans "Exchange rate at open" %}</th>
+              <th scope="col">{% trans "Exchange rate at close" %}</th>
+
               {% endif %}
               <th scope="col">{% trans "Units" %}</th>
               <th scope="col">{% trans "Positions" %}</th>
@@ -61,20 +64,25 @@
           <tbody>
             {% for row in data %}
             {% if is_in_local_currency %}
-            {% get_local_currency_rate row.opened_at__date exchange_rates as exchange_rate %}
+            {% get_local_currency_rate row.opened_at__date exchange_rates as exchange_rate_at_open %}
+            {% get_local_currency_rate row.closed_at__date exchange_rates as exchange_rate_at_close %}
+
             {% endif %}
             <tr>
               <td>{{ forloop.counter }}</td>
               <td>{{ row.opened_at__date }}</td>
+              <td>{% if row.closed_at__date %}{{ row.closed_at__date }}{% endif %}</td>
               <td>{{ row.security__name }}</td>
               {% if is_in_local_currency %}
-              <td>{{ row.open_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
-              <td>{{ row.close_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
-              <td>{{ row.profit_or_loss|to_local_currency:exchange_rate|floatformat:2 }}</td>
-              <td>{{ row.unrealized_amount|to_local_currency:exchange_rate|floatformat:2 }}</td>
-              <td>{{ row.average_open_price|to_local_currency:exchange_rate|floatformat:2 }}</td>
-              <td>{{ row.average_close_price|to_local_currency:exchange_rate|floatformat:2 }}</td>
-              <td>{{ exchange_rate }}</td>
+              <td>{{ row.open_amount|to_local_currency:exchange_rate_at_open|floatformat:2 }}</td>
+              <td>{{ row.close_amount|to_local_currency:exchange_rate_at_close|floatformat:2 }}</td>
+              {% calcualte_profit_or_loss_in_local_currency row exchange_rate_at_open exchange_rate_at_close as profit_or_loss_in_local_currency%}
+              <td>{{ profit_or_loss_in_local_currency|floatformat:2 }}</td>
+              <td>{{ row.unrealized_amount|to_local_currency:exchange_rate_at_open|floatformat:2 }}</td>
+              <td>{{ row.average_open_price|to_local_currency:exchange_rate_at_open|floatformat:2 }}</td>
+              <td>{{ row.average_close_price|to_local_currency:exchange_rate_at_close|floatformat:2 }}</td>
+              <td>{{ exchange_rate_at_open }}</td>
+              <td>{{ exchange_rate_at_close }}</td>
               {% else %}
               <td>{{ row.open_amount|floatformat:2 }}</td>
               <td>{{ row.close_amount|floatformat:2 }}</td>
