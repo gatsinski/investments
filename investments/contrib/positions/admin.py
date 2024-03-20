@@ -101,6 +101,7 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
         "show_aggregated_report",
         "show_local_currency_position_report",
         "show_position_report",
+        "show_tax_report"
     ]
     change_actions = ("close_position", "open_position")
 
@@ -653,8 +654,14 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
     def show_local_currency_position_report(self, request, queryset):
         return self.show_position_report(request, queryset, is_in_local_currency=True)
 
+    @admin.action(description=_("Show tax report"))
+    def show_tax_report(self, request, queryset):
+        return self.show_position_report(request, queryset, is_in_local_currency=True, is_tax_report=True)
+
+
+
     @admin.action(description=_("Show report in USD"))
-    def show_position_report(self, request, queryset, is_in_local_currency=False):
+    def show_position_report(self, request, queryset, is_in_local_currency=False, is_tax_report=False):
         open_amount = F("open_price") * F("units")
         close_amount = F("close_price") * F("units")
 
@@ -730,6 +737,7 @@ class PositionsAdmin(DjangoObjectActions, admin.ModelAdmin):
                 "data": data,
                 "exchange_rates": exchange_rates if is_in_local_currency else None,
                 "is_in_local_currency": is_in_local_currency,
+                "is_tax_report": is_tax_report,
             },
         )
 
