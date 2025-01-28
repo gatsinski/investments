@@ -47,6 +47,14 @@ class Position(TimestampedModel):
     )
     opened_at = models.DateTimeField(_("Opened at"))
     closed_at = models.DateTimeField(_("Closed at"), blank=True, null=True)
+    close_id = models.CharField(
+        _("Close ID"),
+        max_length=254,
+        blank=True,
+        help_text=_(
+            "The unique id of the close order used to identify this action within broker's platform."
+        ),
+    )
     notes = models.CharField(_("Notes"), max_length=1024, blank=True)
 
     class Meta:
