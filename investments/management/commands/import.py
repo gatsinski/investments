@@ -216,7 +216,7 @@ class Command(BaseCommand):
 
         units = Decimal(activity["units"])
 
-        position.close_price = position.open_price + activity["amount"] / units
+        position.close_price = activity["amount"] / units
         position.closed_at = activity["date"]
 
         position.save(update_fields=["close_price", "closed_at"])
