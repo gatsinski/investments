@@ -15,6 +15,28 @@ class Reports(admin.ModelAdmin):
 
   @admin.action(description=_("Show payment report"))
     def show_payment_report(self, request, queryset):
+        file = queryset.first().file
+        dataFrame = pandas.read_csv(file)
+
+        for index, row in dataFrame.iterrows():
+            isBuy = row['Action'] == "Market buy"
+            isSell = row['Action'] == "Market sell"
+
+            activity = {
+                "date": make_aware(
+                    datetime.strptime(row['Time'], "%Y-%m-%d %H:%M:%S.%f")
+                ),
+                "type": row['Action'],
+                "symbol": row['Ticker'],
+                "amount": Decimal(str(row['Total'])),
+                "units": row['No. of shares'],
+                "position_id": row['ID'] if isBuy else '',
+                "close_id": row['ID'] if isSell else '',
+            }
+
+            
+
+
         # data = queryset.values("recorded_on", "position__security").annotate(total_amount=Sum('amount'))
         data = (
             queryset.values("recorded_on", "position__security__name")
@@ -67,7 +89,7 @@ class Reports(admin.ModelAdmin):
 
         return render(
             request,
-            "admin/payments/payment_report.html",
+            "admin/reports/payment_report.html",
             context={
                 **self.admin_site.each_context(request),
                 "opts": self.model._meta,
