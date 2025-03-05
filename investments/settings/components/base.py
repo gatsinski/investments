@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "investments.contrib.positions.apps.PositionsConfig",
     "investments.contrib.payments.apps.PaymentsConfig",
     "investments.contrib.currencies.apps.CurrenciesConfig",
+    "investments.contrib.statements.apps.StatementsConfig",
 ]
 
 ROOT_URLCONF = "investments.urls"
@@ -53,6 +54,10 @@ WSGI_APPLICATION = "investments.wsgi.application"
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
+
+# Media files (file uploads)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
