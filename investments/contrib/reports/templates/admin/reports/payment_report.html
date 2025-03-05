@@ -1,0 +1,72 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n admin_urls rates taxes %}
+
+{% block extrastyle %}
+  <style>
+    table th:nth-child(4), table td:nth-child(4), table th:nth-child(6), table td:nth-child(6), table th:nth-child(9), table td:nth-child(9) {
+      border-left: 2px solid #CCC;
+    }
+  </style>
+{% endblock %}
+
+{% block content_title %}{% trans "Payment report" %}{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  </li>
+  <li class="breadcrumb-item active">{% trans "Payment report" %}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">{% trans "Recorded on" %}</th>
+              <th scope="col">{% trans "Security" %}</th>
+              <th scope="col">{% trans "USD rate" %}</th>
+              <th scope="col">{% trans "EUR rate" %}</th>
+
+              <th scope="col">{% trans "Gross amount (EUR)" %}</th>
+              <th scope="col">{% trans "Withheld tax (EUR)" %}</th>
+              <th scope="col">{% trans "Tax due (EUR)" %}</th>
+              <th scope="col">{% trans "Received amount (BGN)" %}</th>
+              <th scope="col">{% trans "Withheld tax (BGN)" %}</th>
+              <th scope="col">{% trans "Tax due (BGN)" %}</th>
+          </thead>
+          <tbody>
+            {% for row in data %}
+            {% get_local_currency_rate row.date exchange_rates_usd as exchange_rate_usd %}
+
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ row.date }}</td>
+              <td>{{ row.name }}</td>
+              <td>{{ exchange_rate_usd }}</td>
+              <td>{{ exchange_rate_eur }}</td>
+
+              <td>{{ row.gross_amount|floatformat:2 }}</td>
+              <td>{{ row.withhold_tax|floatformat:2 }}</td>
+              <td>{{ row.tax_to_pay|floatformat:2 }}</td>
+              <td>{{ row.gross_amount|to_local_currency:exchange_rate_eur|floatformat:2 }}</td>
+              <td>{{ row.withhold_tax|to_local_currency:exchange_rate_eur|floatformat:2 }}</td>
+              <td>{{ row|calculate_tax|to_local_currency:exchange_rate_eur|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
